@@ -4,12 +4,16 @@ nodes:
       role:
         - controlplane
         - etcd
+      port: 22
+    - address: 10.0.3.2
+      user: ubuntu
+      role:
         - worker
-      ssh_key_path: /home/admin/.ssh/id_rsa
       port: 22
 
-ignore_docker_version: false
 
+ignore_docker_version: false
+ssh_key_path: /home/admin/.ssh/id_rsa
 
 private_registries:
     - url: docker.io
