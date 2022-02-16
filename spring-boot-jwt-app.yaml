@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-jwt
+  namespace: java-demo-ns
+spec:
+  selector:
+    matchLabels:
+      run: spring-boot-jwt-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: spring-boot-jwt-service
+    spec:
+      containers:
+        - name: spring-boot-jwt
+          image: avijit1979/spring-boot-jwt:1.0.0
+          imagePullPolicy: Always
+          env:
+           - name: mysql-server
+             value: mysql-service
+          ports:
+            - containerPort: 8081
+              protocol: TCP

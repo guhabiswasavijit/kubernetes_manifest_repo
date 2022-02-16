@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  namespace: java-demo-ns
+spec:
+    storageClassName: standard
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: java-demo-ns
+spec:
+  selector:
+    matchLabels:
+      run: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: mysql
+    spec:
+      containers:
+        - name: mysql-server
+          image: avijit1979/mysql:ubuntu
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          env:
+           - name: MYSQL_ROOT_PASSWORD
+             value: Swam2@mysql
+          volumeMounts:
+           - name: mysql-persistent-storage
+             mountPath: /var/lib/mysql
+      volumes:
+       - name: mysql-persistent-storage
+         persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+      
+
