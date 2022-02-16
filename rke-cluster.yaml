@@ -17,7 +17,7 @@ private_registries:
       password: Lotus2ibm
 cluster_name: k8s-plyground
 
-kubernetes_version: v1.10.3-rancher2
+kubernetes_version: v1.22.5-rancher2-1
 system_images:
     kubernetes: rancher/hyperkube:v1.23.3-rancher1
     etcd: rancher/coreos-etcd:v3.4.16-rancher1
@@ -29,6 +29,10 @@ system_images:
     dnsmasq: rancher/k8s-dns-dnsmasq-nanny-amd64:1.15.0
     kubedns_sidecar: rancher/k8s-dns-sidecar-amd64:1.15.0
     pod_infra_container: rancher/pause-amd64:3.1
+    coredns: coredns/coredns:1.9.0
+    canal_node: rancher/calico-node:v3.18.1
+    canal_cni: rancher/calico-cni:v3.18.1
+    canal_flannel: rancher/coreos-flannel:v0.13.0-rancher1
 
 services:
     etcd:
