@@ -1,6 +1,6 @@
 nodes:
     - address: 10.0.3.31
-      user: hadoop
+      user: ubuntu
       role:
         - controlplane
         - etcd
