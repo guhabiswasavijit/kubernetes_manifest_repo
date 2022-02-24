@@ -27,7 +27,6 @@ system_images:
     etcd: rancher/coreos-etcd:v3.4.16-rancher1
     alpine: rancher/rke-tools:v0.1.79-linux-amd64
     nginx_proxy: rancher/rke-tools:v0.1.79-linux-amd64
-    cert_downloader: rancher/rke-tools:v0.1.79-linux-amd64
     kubernetes_services_sidecar: rancher/rke-tools:v0.1.79-linux-amd64
     kubedns: rancher/k8s-dns-kube-dns-amd64:1.15.0
     dnsmasq: rancher/k8s-dns-dnsmasq-nanny-amd64:1.15.0
