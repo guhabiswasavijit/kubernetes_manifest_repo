@@ -119,7 +119,7 @@ kubectl label namespace/java-demo-ns istio-injection=enabled
 kubectl -n java-demo-ns get deploy mysql -0 yaml | istioctl kube-inject -f - | kubectl apply -f -
 
 openssl genrsa -out ./rke-cluster_certs/kube-ca-key.pem 2048
-openssl req -x509 -new -nodes -key ./rke-cluster_certs/kube-ca-key.pem -days 10000 -out kube-ca.pem -subj "/CN=kube-ca"
+openssl req -x509 -new -nodes -key ./rke-cluster_certs/kube-ca-key.pem -days 10000 -out ./rke-cluster_certs/kube-ca.pem -subj "/CN=kube-ca"
 openssl x509 -req -days 1825 -sha256 -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -
 
 
