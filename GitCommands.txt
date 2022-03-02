@@ -1,0 +1,18 @@
+git init
+git remote add Spring-Boot-JWT-Repo https://github.com/guhabiswasavijit/Spring-Boot-JWT-Repo.git
+
+git pull Spring-Boot-JWT-Repo main
+git add --all
+git commit -m "Spring Boot JWT demo"
+git branch -m master
+git push Spring-Boot-JWT-Repo
+
+git config --global user.email "guhabiswas.avijit@gmail.com"
+
+git init
+git remote add kubernetes_manifest_repo https://github.com/guhabiswasavijit/kubernetes_manifest_repo.git
+git pull kubernetes_manifest_repo main
+git add rke-cluster.yaml pv-volume.yaml mysql_deployment.yaml spring-boot-jwt-app.yaml .gitignore
+git commit -m "Kubernetes Manifest Demo"
+git branch -m main
+git push kubernetes_manifest_repo

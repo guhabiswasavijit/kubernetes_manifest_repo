@@ -1,0 +1,122 @@
+java -jar -Dmysql-server=localhost ImageStorge-0.0.1-SNAPSHOT.jar
+kubectl run mysqldb --env MYSQL_ROOT_PASSWORD=Swam2@mysql --image mysql:latest
+kubectl version
+kubectl get nodes
+kubectl get deployments
+kubectl get pods
+
+kubectl logs spring-boot-jwt
+kubectl exec -it mysqldb bash
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install jdk8
+curl -k -L https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz -s -o | tar -zxf -
+
+kubectl run spring-boot-jwt --image spring-boot-jwt-img:latest
+D:\software\sts-4.13.0.RELEASE\SpringToolSuite4.exe -vmargs -javaagent:lombok.jar
+
+mysqld --install
+
+mysqld --initialize
+
+mysqld --init-file=D:\\workspace\\change_mysql_password.txt
+
+
+
+
+kubectl create deployment --image=staytuned/spring-boot-jwt jwt-app
+
+docker run -d -p 5000:5000 --restart always --name registry registry:2
+
+docker tag staytuned/spring-boot-jwt:latest localhost:5000/spring-boot-jwt:latest
+
+kubectl delete pod spring-boot-jwt --now
+
+kubectl run spring-boot-jwt --image localhost:5000/spring-boot-jwt:latest
+
+kubectl get deployments --all-namespaces
+
+kubectl delete -n default deployment jwt-app
+
+kubectl exec -it spring-boot-jwt bash
+
+curl -X GET http://127.0.0.1:5000/v2/spring-boot-jwt/tags/list
+
+
+docker exec registry bin/registry garbage-collect --dry-run /etc/docker/registry/config.yml
+
+http://127.0.0.1:5000/v2/spring-boot-jwt/tags/list
+
+curl -X DELETE http://127.0.0.1:5000/v2/spring-boot-jwt/tags/latest
+
+docker exec registry /bin/registry garbage-collect /etc/docker/registry/config.yml --delete-untagged
+
+kubectl create -f D:\\workspace\\manifest\\mysql_deployment.yaml
+kubectl apply -f D:\\workspace\\manifest\\spring-boot-jwt-app.yaml
+kubectl create -f D:\\workspace\\manifest\\kube-proxy-pod.yaml
+kubectl create -f D:\\workspace\\manifest\\pv-volume.yaml
+
+
+kubectl expose deployment mysql --type=NodePort --name=mysql-service -n java-demo-ns
+
+kubectl expose deployment spring-boot-jwt --type=NodePort --name=spring-boot-jwt-service -n java-demo-ns
+
+kubectl describe services spring-boot-jwt-service -n java-demo-ns
+
+kubectl port-forward --namespace=java-demo-ns service/spring-boot-jwt-service 8081:8081
+
+kubectl describe services mysql-service -n java-demo-ns
+
+kubectl delete -n default deployment mysql
+
+kubectl get pods --selector="run=mysql" --output=wide
+
+
+curl -# -k -o isio-1.11.6.zip https://github.com/istio/istio/releases/download/1.11.6/istio-1.11.6-win.zip
+unzip isio-1.11.6.zip -d isio-1.11.6
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
+
+curl -k -o ingress-nginx-controller-deploy.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
+
+curl -k -o kind-example-config.yaml https://raw.githubusercontent.com/kubernetes-sigs/kind/main/site/content/docs/user/kind-example-config.yaml
+
+git clone https://github.com/nigelpoulton/TheK8sBook.git
+
+
+docker pull kindest/node:v1.23.3
+
+my host file entry: 127.0.0.1 kubernetes.docker.internal
+
+kubectl -n ingress-nginx port-forward ingress-nginx-controller-568764d844-2c9kb 80
+
+http://kubernetes.docker.internal/home/
+
+istioctl x precheck
+istioctl profile list
+istioctl install --set profile=default
+
+kubectl create namespace java-demo-ns
+
+kubectl exec -it mysql-54b74974fc-ff246 bash -n java-demo-ns
+
+kubectl exec -n java-demo-ns -it spring-boot-jwt-7d7f859ff9-86rtd bash
+
+kubectl delete deployment mysql -n java-demo-ns
+kubectl delete svc mysql-service -n java-demo-ns
+kubectl delete pv mysql-pv-volume -n java-demo-ns
+kubectl delete pvc mysql-pv-claim -n java-demo-ns
+
+kubectl delete all --all -n java-demo-ns
+
+
+
+
+
+
+kubectl create -f D:\\workspace\\manifest\\mysql-pod.yaml
+
+kubectl label namespace/java-demo-ns istio-injection=enabled
+
+kubectl -n java-demo-ns get deploy mysql -0 yaml | istioctl kube-inject -f - | kubectl apply -f -
+
+
+

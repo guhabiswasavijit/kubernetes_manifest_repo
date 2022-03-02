@@ -1,0 +1,20 @@
+docker build -f Dockerfile -t spring-boot-jwt:1.0.0 .
+
+
+docker tag spring-boot-jwt:1.0.0 avijit1979/spring-boot-jwt:1.0.0
+docker push avijit1979/spring-boot-jwt:1.0.0
+
+docker network create -d bridge app-tier
+
+docker run -rm -d -e MYSQL_ROOT_PASSWORD=Swam2@mysql --name mysqldb -p 3306:3306 mysql:latest
+
+docker exec -it mysqldb bash
+
+
+docker tag mysql:demo avijit1979/mysql:ubuntu
+docker push avijit1979/mysql:ubuntu
+
+docker login -u avijit1979
+DockerHubAccessToken:034bc7bc-7251-4ba8-a639-7e4201d6196d
+
+
