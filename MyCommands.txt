@@ -121,9 +121,7 @@ kubectl -n java-demo-ns get deploy mysql -0 yaml | istioctl kube-inject -f - | k
 openssl rand -writerand .rnd
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./rke-cluster_certs/kube-ca-key.pem -out ./rke-cluster_certs/kube-ca.pem -subj "/CN=kube-ca"
-openssl req -newkey rsa:2048 -nodes -days 365 -keyout ./rke-cluster_certs/kube-admin-key.pem -out ./rke-cluster_certs/kube-admin-csr.pem -subj "/CN=kube-ca"
-
-openssl x509 -req -days 365 -signkey ./rke-cluster_certs/kube-ca.pem -in ./rke-cluster_certs/kube-admin-csr.pem	-out ./rke-cluster_certs/kube-admin.pem
+openssl x509 -req -days 365 -set_serial 01 -in ./rke-cluster_certs/kube-admin-csr.pem	-out ./rke-cluster_certs/kube-admin.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem
 openssl x509 -req -days 365 -signkey ./rke-cluster_certs/kube-ca.pem -in ./rke-cluster_certs/kube-apiserver-csr.pem	-out ./rke-cluster_certs/kube-apiserver.pem
 openssl x509 -req -days 365 -signkey ./rke-cluster_certs/kube-ca.pem -in ./rke-cluster_certs/kube-apiserver-proxy-client-csr.pem  -out ./rke-cluster_certs/kube-apiserver-proxy-client.pem
 openssl x509 -req -days 365 -signkey ./rke-cluster_certs/kube-ca.pem -in ./rke-cluster_certs/kube-controller-manager-csr.pem  -out ./rke-cluster_certs/kube-controller-manager.pem
