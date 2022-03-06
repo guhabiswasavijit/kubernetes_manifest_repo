@@ -1,0 +1,22 @@
+systemctl disable --now systemd-resolved
+mv /etc/resolv.conf /etc/resolv.conf.old
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+apt install dnsmasq
+systemctl status dnsmasq
+cp /etc/dnsmasq.conf{,.bak}
+nano /etc/dnsmasq.conf
+---- dnsmasq.conf entry ------
+port=53
+domain-needed
+bogus-priv
+listen-address=127.0.0.1,192.168.57.3
+expand-hosts
+domain=seven-heaven.com
+cache-size=1000
+-------------------------------------
+
+sed -i '1i nameserver 192.168.57.3' /etc/resolv.conf
+cat /etc/resolv.conf
+dnsmasq --test
+systemctl restart dnsmasq
+netstat -alnp | grep -i :53
