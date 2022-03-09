@@ -1,3 +1,4 @@
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 java -jar -Dmysql-server=localhost ImageStorge-0.0.1-SNAPSHOT.jar
 kubectl run mysqldb --env MYSQL_ROOT_PASSWORD=Swam2@mysql --image mysql:latest
 kubectl version
