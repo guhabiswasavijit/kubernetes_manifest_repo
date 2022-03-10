@@ -132,5 +132,15 @@ openssl x509 -req -days 365 -set_serial 01 -in ./rke-cluster_certs/kube-proxy-cs
 openssl x509 -req -days 365 -set_serial 01 -in ./rke-cluster_certs/kube-scheduler-csr.pem  -out ./rke-cluster_certs/kube-scheduler.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem
 
 
+2
+denylist
+reject_force_umount
+kexec_load errno 1
+open_by_handle_at errno 1
+init_module errno 1
+finit_module errno 1
+delete_module errno 1
+
+
 
 
