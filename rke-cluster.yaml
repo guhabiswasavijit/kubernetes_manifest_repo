@@ -1,12 +1,12 @@
 nodes:
-    - address: 10.0.3.27
+    - address: 10.1.50.38
       user: root
       role:
         - controlplane
         - etcd
       port: 22
-    - address: 10.0.3.34
-      user: ubuntu
+    - address: 10.1.50.252
+      user: root
       role:
         - worker
       port: 22
