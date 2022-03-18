@@ -16,3 +16,6 @@ git add rke-cluster.yaml pv-volume.yaml mysql_deployment.yaml spring-boot-jwt-ap
 git commit -m "Kubernetes Manifest Demo"
 git branch -m main
 git push kubernetes_manifest_repo
+
+
+GitHub Ubuntu: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

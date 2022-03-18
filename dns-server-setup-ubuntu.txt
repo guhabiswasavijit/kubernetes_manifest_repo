@@ -1,4 +1,5 @@
 systemctl disable --now systemd-resolved
+systemctl enable --now systemd-resolved
 mv /etc/resolv.conf /etc/resolv.conf.old
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 apt install dnsmasq
