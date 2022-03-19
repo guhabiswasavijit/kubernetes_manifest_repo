@@ -1,3 +1,4 @@
+docker run -d --name nfs --privileged -v C:/mysql/data:/nfsshare -e SHARED_DIRECTORY=/nfsshare itsthenetwork/nfs-server-alpine:latest
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 java -jar -Dmysql-server=localhost ImageStorge-0.0.1-SNAPSHOT.jar
 kubectl run mysqldb --env MYSQL_ROOT_PASSWORD=Swam2@mysql --image mysql:latest
@@ -52,6 +53,7 @@ curl -X DELETE http://127.0.0.1:5000/v2/spring-boot-jwt/tags/latest
 docker exec registry /bin/registry garbage-collect /etc/docker/registry/config.yml --delete-untagged
 
 kubectl create -f D:\\workspace\\manifest\\mysql_deployment.yaml
+kubectl create -f D:\\workspace\\manifest\\\nfs-server-deploment.yaml
 kubectl apply -f D:\\workspace\\manifest\\spring-boot-jwt-app.yaml
 kubectl create -f D:\\workspace\\manifest\\kube-proxy-pod.yaml
 kubectl create -f D:\\workspace\\manifest\\pv-volume.yaml

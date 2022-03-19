@@ -16,7 +16,7 @@ spec:
       containers:
         - name: spring-boot-jwt
           image: avijit1979/spring-boot-jwt:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
            - name: mysql-server
              value: mysql-service
