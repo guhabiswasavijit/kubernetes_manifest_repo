@@ -7,6 +7,10 @@ kubectl get nodes
 kubectl get deployments
 kubectl get pods
 
+kubectl get pod spring-boot-jwt-7b5fc544f4-9jm2w --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}
+
+kubectl port-forward spring-boot-jwt-7b5fc544f4-9jm2w 8081:8081 -n java-demo-ns
+
 kubectl logs spring-boot-jwt
 kubectl exec -it mysqldb bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
@@ -53,6 +57,7 @@ curl -X DELETE http://127.0.0.1:5000/v2/spring-boot-jwt/tags/latest
 docker exec registry /bin/registry garbage-collect /etc/docker/registry/config.yml --delete-untagged
 
 kubectl create -f D:\\workspace\\manifest\\mysql_deployment.yaml
+kubectl create -f D:\\workspace\\manifest\\nfs-persistent-volume.yaml
 kubectl create -f D:\\workspace\\manifest\\\nfs-server-deploment.yaml
 kubectl apply -f D:\\workspace\\manifest\\spring-boot-jwt-app.yaml
 kubectl create -f D:\\workspace\\manifest\\kube-proxy-pod.yaml
@@ -62,6 +67,8 @@ kubectl create -f D:\\workspace\\manifest\\pv-volume.yaml
 kubectl expose deployment mysql --type=NodePort --name=mysql-service -n java-demo-ns
 
 kubectl expose deployment spring-boot-jwt --type=NodePort --name=spring-boot-jwt-service -n java-demo-ns
+
+kubectl expose deployment nfs-server --type=ClusterIP --name=nfs-server-service -n java-demo-ns
 
 kubectl describe services spring-boot-jwt-service -n java-demo-ns
 
@@ -99,7 +106,7 @@ istioctl install --set profile=default
 
 kubectl create namespace java-demo-ns
 
-kubectl exec -it mysql-54b74974fc-ff246 bash -n java-demo-ns
+kubectl exec -it mysql-99c885d8f-f9zw8 bash -n java-demo-ns
 
 kubectl exec -n java-demo-ns -it spring-boot-jwt-7d7f859ff9-86rtd bash
 

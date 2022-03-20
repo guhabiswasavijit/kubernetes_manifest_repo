@@ -26,6 +26,8 @@ spec:
       labels:
         run: mysql
     spec:
+      nodeSelector:     
+        kubernetes.io/hostname: k8s-playground-worker2
       containers:
         - name: mysql-server
           image: avijit1979/mysql:ubuntu

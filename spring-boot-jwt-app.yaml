@@ -13,7 +13,9 @@ spec:
       labels:
         run: spring-boot-jwt-service
     spec:
-      containers:
+       nodeSelector:     
+        kubernetes.io/hostname: k8s-playground-worker3
+       containers:
         - name: spring-boot-jwt
           image: avijit1979/spring-boot-jwt:1.0.0
           imagePullPolicy: IfNotPresent
