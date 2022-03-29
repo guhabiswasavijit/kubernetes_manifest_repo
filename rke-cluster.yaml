@@ -24,31 +24,6 @@ private_registries:
 cluster_name: k8s-plyground
 
 kubernetes_version: v1.22.6-rancher1-1
-
-services:
-    etcd:
-    kube-api:
-      service_cluster_ip_range: 10.43.0.0/16
-      service_node_port_range: 30000-32767    
-      pod_security_policy: false
-      extra_args:
-        audit-log-path: "-"
-        delete-collection-workers: 3
-        v: 4
-    kube-controller:
-      cluster_cidr: 10.42.0.0/16
-      service_cluster_ip_range: 10.43.0.0/16
-    kubelet:
-      cluster_domain: cluster.local
-      cluster_dns_server: 10.43.0.10
-      fail_swap_on: false
-      extra_args:
-        max-pods: 250
-      extra_binds:
-        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
-    kubeproxy:
-      extra_args: {}
-      extra_binds: []
 network:
     plugin: canal
     options: {}
