@@ -4,11 +4,13 @@ nodes:
       role:
         - controlplane
         - etcd
+      hostname_override: masternode.cluster.local
       port: 22
     - address: 10.1.50.252
       user: root
       role:
         - worker
+      hostname_override: kubeWorker.cluster.local
       port: 22
 
 
@@ -44,9 +46,18 @@ services:
         max-pods: 250
       extra_binds:
         - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
-    
+    kubeproxy:
+      extra_args: {}
+      extra_binds: []
 network:
     plugin: canal
+    options: {}
+    authentication:
+      strategy: x509
+      options: {}
+      sans:
+        - "masternode.cluster.local"
+        - "kubeWorker.cluster.local"
 dns:
     provider: coredns
 ingress:
@@ -59,11 +70,11 @@ addons: |-
     apiVersion: v1
     kind: Pod
     metadata:
-      name: my-nginx
+      name: nginx-proxy
       namespace: default
     spec:
       containers:
-      - name: my-nginx
+      - name: nginx-proxy
         image: nginx
         ports:
         - containerPort: 80
