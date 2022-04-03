@@ -6,6 +6,15 @@ kubectl version
 kubectl get nodes
 kubectl get deployments
 kubectl get pods
+export KUBECONFIG=/home/admin/workspace/MyProjects/kubernetes_manifest_repo/kube_config_rke-cluster.yaml
+
+mount -o bind /var/lib/rancher /var/lib/rancher
+mount --make-shared /var/lib/rancher
+mount -o bind /var/lib/kubelet /var/lib/kubelet
+mount --make-shared /var/lib/kubelet
+lxc config device add masterNode kmsg disk  source=/dev/kmsg path=/dev/kmsg
+printf 'lxc.mount.auto = proc:rw sys:rw cgroup:rw \n lxc.cgroup.devices.allow=a' | lxc config set masterNode raw.lxc -
+Failed to construct kubelet dependencies" err="error reading /var/lib/kubelet/pki/kubelet.key, certificate and key must be supplied as a pair
 
 kubectl get pod spring-boot-jwt-7b5fc544f4-9jm2w --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}
 
