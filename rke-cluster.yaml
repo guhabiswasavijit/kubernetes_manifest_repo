@@ -56,7 +56,7 @@ services:
       extra_args:
         max-pods: 250
       extra_binds:
-        - "/usr/libexec/kubernetes/kubelet-plugins:/var/lib/kubelet:/var/lib/rancher"
+        - "/usr/libexec/kubernetes/kubelet-plugins"
         
     kubeproxy:
       image: rancher/hyperkube:v1.23.5-rancher1
