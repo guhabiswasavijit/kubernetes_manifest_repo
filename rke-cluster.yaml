@@ -49,14 +49,14 @@ services:
       cluster_cidr: 10.42.0.0/16
       service_cluster_ip_range: 10.43.0.0/16
     kubelet:
-      image: hyperkube:v1.23.5-rancher1
+      image: rancher/hyperkube:v1.23.5-rancher1
       cluster_domain: cluster.local
       cluster_dns_server: 10.43.0.10
       fail_swap_on: false
       extra_args:
         max-pods: 250
       extra_binds:
-        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
+        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:/var/lib/kubelet"
         
     kubeproxy:
       image: rancher/hyperkube:v1.23.5-rancher1
