@@ -4,13 +4,13 @@ nodes:
       role:
         - controlplane
         - etcd
-      hostname_override: masternode.cluster.local
+      hostname_override: masternode
       port: 22
     - address: 10.1.50.252
       user: root
       role:
         - worker
-      hostname_override: kubeWorker.cluster.local
+      hostname_override: kubeWorker
       port: 22
 
 
@@ -56,7 +56,7 @@ services:
       extra_args:
         max-pods: 250
       extra_binds:
-        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:/var/lib/kubelet"
+        - "/usr/libexec/kubernetes/kubelet-plugins:/var/lib/kubelet:/var/lib/rancher"
         
     kubeproxy:
       image: rancher/hyperkube:v1.23.5-rancher1
