@@ -7,8 +7,9 @@ git commit -m "Spring Boot JWT demo"
 git branch -m master
 git push Spring-Boot-JWT-Repo
 
-git config ---global user.email "guhabiswas.avijit@gmail.com"
-git config --global user.password "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"
+git config --local user.email "guhabiswas.avijit@gmail.com"
+git config --local user.password "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"
+git config --local user.name "guhabiswasavijit"
 
 git init
 git remote add kubernetes_manifest_repo https://github.com/guhabiswasavijit/kubernetes_manifest_repo.git
@@ -19,4 +20,4 @@ git branch -m main
 git push kubernetes_manifest_repo
 
 
-GitHub Ubuntu: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
+GitHub Ubuntu: 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
