@@ -54,10 +54,13 @@ services:
       cluster_dns_server: 10.43.0.10
       fail_swap_on: false
       extra_args:
-        max-pods: 250
+        - max-pods: 250
+        - feature-gates : "RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true"
       extra_binds:
-        - "/usr/libexec/kubernetes/kubelet-plugins"
-        
+        - "/dev/kmsg:/dev/kmsg"
+        - "/var/lib/rancher:/var/lib/rancher"
+        - "/var/lib/kubelet:/var/lib/kubelet"
+        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
     kubeproxy:
       image: rancher/hyperkube:v1.23.5-rancher1
       extra_args: {}
