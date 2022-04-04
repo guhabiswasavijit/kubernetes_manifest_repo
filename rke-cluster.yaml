@@ -54,8 +54,8 @@ services:
       cluster_dns_server: 10.43.0.10
       fail_swap_on: false
       extra_args:
-        - max-pods: 250
-        - feature-gates : "RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true"
+          max-pods: 250
+          feature-gates : "RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true"
       extra_binds:
         - "/dev/kmsg:/dev/kmsg"
         - "/var/lib/rancher:/var/lib/rancher"
