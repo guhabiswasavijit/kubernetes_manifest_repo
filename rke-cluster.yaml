@@ -21,7 +21,7 @@ private_registries:
     - url: docker.io
       user: avijit1979
       password: Lotus2ibm
-cluster_name: k8s-plyground
+cluster_name: k8s-playground
 services:
     etcd:
       image: rancher/coreos-etcd:v3.4.16-rancher1
@@ -41,30 +41,40 @@ services:
       service_node_port_range: 30000-32767    
       pod_security_policy: false
       extra_args:
-        audit-log-path: "-"
+        audit-log-path: "/var/logs/kube-access.log"
         delete-collection-workers: 3
         v: 4
     kube-controller:
       image: rancher/hyperkube:v1.23.5-rancher1
       cluster_cidr: 10.42.0.0/16
       service_cluster_ip_range: 10.43.0.0/16
+      extra_args:
+        v: 4
+        feature-gates: RotateKubeletServerCertificate=true
+        cluster-signing-cert-file: "/etc/kubernetes/ssl/kube-ca.pem"
+        cluster-signing-key-file: "/etc/kubernetes/ssl/kube-ca-key.pem"
     kubelet:
       image: rancher/hyperkube:v1.23.5-rancher1
       cluster_domain: cluster.local
       cluster_dns_server: 10.43.0.10
       fail_swap_on: false
+      pod-infra-container-image: "k8s.gcr.io/pause:3.2"
+      generate_serving_certificate: true
       extra_args:
+          v: 4
           max-pods: 250
-          feature-gates : "RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true"
+          feature-gates: RotateKubeletServerCertificate=true
       extra_binds:
-        - "/dev/kmsg:/dev/kmsg"
-        - "/var/lib/rancher:/var/lib/rancher"
-        - "/var/lib/kubelet:/var/lib/kubelet"
-        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
+        - "/dev/kmsg:/dev/kmsg:z"
+        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:z"
+        - "/var/lib/rancher:/var/lib/rancher:z"
+        - "/var/lib/kubelet:/var/lib/kubelet:z"
+    scheduler:
+      extra_args:
+        v: 4
     kubeproxy:
-      image: rancher/hyperkube:v1.23.5-rancher1
-      extra_args: {}
-      extra_binds: []
+       extra_args:
+         v: 4
 network:
     plugin: canal
     options: {}
