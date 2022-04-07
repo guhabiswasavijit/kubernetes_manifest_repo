@@ -22,30 +22,18 @@ private_registries:
       user: avijit1979
       password: Lotus2ibm
 cluster_name: k8s-playground
+kubernetes_version: v1.22.6-rancher1-1
 services:
     etcd:
-      image: rancher/coreos-etcd:v3.4.16-rancher1
-      extra_args: {}
-      extra_binds: []
-      external_urls: []
-      ca_cert: ""
-      cert: ""
-      key: ""
-      path: ""
-      snapshot: false
-      retention: ""
-      creation: ""
     kube-api:
-      image: rancher/hyperkube:v1.23.5-rancher1
       service_cluster_ip_range: 10.43.0.0/16
       service_node_port_range: 30000-32767    
       pod_security_policy: false
       extra_args:
-        audit-log-path: "/var/logs/kube-access.log"
+        audit-log-path: "/var/log/kube-access.log"
         delete-collection-workers: 3
         v: 4
     kube-controller:
-      image: rancher/hyperkube:v1.23.5-rancher1
       cluster_cidr: 10.42.0.0/16
       service_cluster_ip_range: 10.43.0.0/16
       extra_args:
@@ -54,7 +42,6 @@ services:
         cluster-signing-cert-file: "/etc/kubernetes/ssl/kube-ca.pem"
         cluster-signing-key-file: "/etc/kubernetes/ssl/kube-ca-key.pem"
     kubelet:
-      image: rancher/hyperkube:v1.23.5-rancher1
       cluster_domain: cluster.local
       cluster_dns_server: 10.43.0.10
       fail_swap_on: false
