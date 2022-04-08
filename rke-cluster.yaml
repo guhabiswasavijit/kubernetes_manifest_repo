@@ -54,10 +54,9 @@ services:
       extra_binds:
         - "/dev/kmsg:/dev/kmsg:z"
         - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:z"
-        - "/var/lib/kubelet:/var/lib/kubelet:z"
     scheduler:
       extra_args:
-        v: 4
+         v: 4
     kubeproxy:
        extra_args:
          v: 4
