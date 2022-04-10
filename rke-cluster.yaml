@@ -53,8 +53,8 @@ services:
           feature-gates: RotateKubeletServerCertificate=true
       extra_binds:
         - "/dev/kmsg:/dev/kmsg:z"
-        - "/var/lib/rancher:/var/lib/rancher:z"
-        - "/var/lib/kubelet:/var/lib/kubelet:z"
+        - "/var/lib/rancher:/:z"
+        - "/var/lib/kubelet:/:z"
         - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:z"
     scheduler:
       extra_args:
