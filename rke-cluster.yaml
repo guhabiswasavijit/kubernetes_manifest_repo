@@ -50,7 +50,7 @@ services:
       extra_args:
           v: 4
           max-pods: 250
-          feature-gates: "RotateKubeletServerCertificate=true,RotateKubeletClientCertificate=true"
+          feature-gates: RotateKubeletServerCertificate=true
       extra_binds:
         - "/dev/kmsg:/dev/kmsg:z"
         - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:z"
@@ -65,7 +65,7 @@ services:
         metricsBindAddress : 127.0.0.1:10249
         cluster-cidr : 10.43.0.0/16
         log-dir :  "/var/log/"
-        feature-gates: "RotateKubeletServerCertificate=true,RotateKubeletClientCertificate=true"
+        feature-gates: RotateKubeletServerCertificate=true
         v: 4
        extra_binds:
         - "/lib/modules:/lib/modules:ro"
