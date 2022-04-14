@@ -1,0 +1,71 @@
+
+mysqld.cnf
+---- entry ----------
+bind-address=0.0.0.1
+------------------- 
+CREATE USER mysql@'%' IDENTIFIED BY 'Swam2@mysql';
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%';
+flush privileges;
+---------------------------------
+ssh -fN avijit@192.168.42.171 -L 3336:192.168.42.171:3306 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
+mysql -h 127.0.0.1 -P 3336 -u mysql -p
+ssh avijit@192.168.42.171 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
+mysqladmin -u root -p create jr_repo_db
+
+mysql -u root -p Lotus2ibm
+
+CREATE DATABASE jr_repo_db;
+use jr_repo_db;
+
+create table employee(
+   id INT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(100) NOT NULL,
+   email VARCHAR(40) NOT NULL,
+   mobile VARCHAR(40),
+   salary INT,
+   PRIMARY KEY ( id )
+);
+
+show tables;
+CREATE DATABASE musical;
+mysql --user="username" --database="databasename" --password="yourpassword" < "filepath"
+
+.to("mysql:{{mysql_db_name}}?host={{mysql_host}}&port={{mysql_port}}&userName={{mysql_user}}&userPassword={{mysql_password}}&scriptDir={{output_directory}}&scriptFile={{output_file_name}}")
+
+
+mysql --host=127.0.0.1 --port=3306 --user=root --database=musical --password=Lotus2ibm < C:\SampleData\sql\ddlScript.sql
+
+
+create table employee(
+   EMPLOYEE_ID VARCHAR(100),
+   FIRST_NAME VARCHAR(100),
+   LAST_NAME VARCHAR(100),
+   EMAIL VARCHAR(100),
+   PHONE_NUMBER VARCHAR(100),
+   HIRE_DATE VARCHAR(100),
+   JOB_ID VARCHAR(100),
+   SALARY INT,
+   COMMISSION_PCT INT,
+   MANAGER_ID INT,
+   DEPARTMENT_ID INT
+);
+
+create table employee(
+   EMPLOYEE_ID VARCHAR(100),
+   FIRST_NAME VARCHAR(100),
+   LAST_NAME VARCHAR(100),
+   EMAIL VARCHAR(100),
+   PHONE_NUMBER VARCHAR(100),
+   HIRE_DATE VARCHAR(100),
+   JOB_ID VARCHAR(100),
+   SALARY VARCHAR(100),
+   COMMISSION_PCT VARCHAR(100),
+   MANAGER_ID VARCHAR(100),
+   DEPARTMENT_ID VARCHAR(100)
+);
+
+mysql --host=127.0.0.1 --port=3306 --user=root --database=musical --password=Lotus2ibm < C:\SampleData\mysqlemployeedata.sql
+
+mysql --host=127.0.0.1 --port=3306 --user=root --database=lportal --password=Lotus2ibm < C:\SampleData\liferay-ce-portal-sql-7.4.3.4-ga4-20211020095956970\liferay-ce-portal-sql-7.4.3.4-ga4\portal-tables\portal-tables-mysql.sql
+jdbc:mysql://127.0.0.1:3306/lportal?allowPublicKeyRetrieval=true&useSSL=false
+
