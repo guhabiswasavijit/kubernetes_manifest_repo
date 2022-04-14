@@ -20,4 +20,4 @@ git branch -m main
 git push kubernetes_manifest_repo
 
 
-GitHub Ubuntu: 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
+GitHub Personal Access Token: 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
