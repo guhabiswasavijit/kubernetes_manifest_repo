@@ -8,3 +8,4 @@ EOF
 
 rke config --empty --name cluster.yml
 rke up --config ./rancher_cluster.yml
+mount --make-shared /
