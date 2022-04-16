@@ -1,0 +1,68 @@
+lxc storage list
+lxc storage create docker btrfs
+lxc storage volume create docker masterNode
+lxc config device remove masterNode docker
+lxc storage volume delete docker_lvm masterNode_lvm
+
+lxc storage create docker_lvm lvm
+
+lxc storage volume create docker_lvm masternode_docker_lvm
+lxc config device add masterNode docker disk pool=docker_lvm source=masternode_docker_lvm path=/var/lib/docker
+lxc storage volume create docker_lvm masternode_kubelet_lvm
+lxc config device add masterNode kubelet disk pool=docker_lvm source=masternode_kubelet_lvm path=/var/lib/kubelet
+
+
+lxc storage volume create docker_lvm kubeworker_docker_lvm
+lxc config device add kubeWorker docker disk pool=docker_lvm source=kubeworker_docker_lvm path=/var/lib/docker
+lxc storage volume create docker_lvm kubeworker_kubelet_lvm
+lxc config device add kubeWorker kubelet disk pool=docker_lvm source=kubeworker_kubelet_lvm path=/var/lib/kubelet
+
+lxc storage volume list docker
+lxc profile device add default root disk path=/ pool=docker 
+
+lxc launch images:ubuntu/20.04 masterNode
+lxc config set masterNode security.nesting=true security.syscalls.intercept.mknod=true security.syscalls.intercept.setxattr=true
+
+printf 'lxc.mount.auto = proc:rw sys:rw cgroup:rw \n lxc.cgroup.devices.allow=a' | lxc config set masterNode raw.lxc -
+
+
+lxc config device add masterNode kmsg disk  source=/dev/kmsg path=/dev/kmsg
+
+lxc restart masterNode
+lxc exec masterNode bash
+lxc exec kubeWorker bash
+lxc config edit masterNode
+
+
+root password for both containers:root
+
+lxc info --show-log masterNode
+
+raw.seccomp: |-
+    2
+	denylist
+	reject_force_umount
+	kexec_load errno 1
+	open_by_handle_at errno 1
+	init_module errno 1
+	finit_module errno 1
+	delete_module errno 1
+	
+lxc storage volume create docker kubeWorker
+lxc launch images:ubuntu/20.04 kubeWorker
+lxc config device add kubeWorker docker disk pool=docker source=kubeWorker path=/var/lib/docker
+lxc config edit kubeWorker
+lxc config set kubeWorker security.nesting=true security.syscalls.intercept.mknod=true security.syscalls.intercept.setxattr=true
+
+
+config: 
+       raw.lxc: lxc.aa_profile=unconfined
+description: Default LXD profile
+devices:
+  root:
+    path: /
+    pool: docker
+    type: disk
+name: default
+
+lxc config device add masterNode eth0 nic nictype=bridged parent=br0 name=eth0
