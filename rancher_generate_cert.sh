@@ -1,0 +1,14 @@
+#!/bin/bash
+rke cert generate-csr --config rke-cluster.yaml
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./rke-cluster_certs/kube-kubelet-10-1-50-38-key.pem -out ./rke-cluster_certs/kube-kubelet-10-1-50-38.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./rke-cluster_certs/kube-kubelet-10-1-50-252-key.pem -out ./rke-cluster_certs/kube-kubelet-10-1-50-252.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./rke-cluster_certs/kube-service-account-token-key.pem -out ./rke-cluster_certs/kube-service-account-token.pem 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./rke-cluster_certs/kube-ca-key.pem -out ./rke-cluster_certs/kube-ca.pem 
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-admin-csr.pem	-out ./rke-cluster_certs/kube-admin.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-apiserver-csr.pem	-out ./rke-cluster_certs/kube-apiserver.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-apiserver-proxy-client-csr.pem  -out ./rke-cluster_certs/kube-apiserver-proxy-client.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-controller-manager-csr.pem  -out ./rke-cluster_certs/kube-controller-manager.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-etcd-10-1-50-38-csr.pem  -out ./rke-cluster_certs/kube-etcd-10-1-50-38.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-node-csr.pem  -out ./rke-cluster_certs/kube-node.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-proxy-csr.pem  -out ./rke-cluster_certs/kube-proxy.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
+openssl x509 -req -days 365 -CAcreateserial -in ./rke-cluster_certs/kube-scheduler-csr.pem  -out ./rke-cluster_certs/kube-scheduler.pem -CA ./rke-cluster_certs/kube-ca.pem -CAkey ./rke-cluster_certs/kube-ca-key.pem -extensions v3_ext -extfile csr.conf
