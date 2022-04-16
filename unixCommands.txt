@@ -1,0 +1,18 @@
+ssh-copy-id root@192.168.139.196
+ssh-keygen -t rsa -b 4096
+cat ~/.ssh/id_rsa.pub | ssh root@192.168.172.196 "touch ~/.ssh/authorized_keys && cat >> ~/.ssh/authorized_keys"
+
+sudo lsof -i -P -n | grep LISTEN
+sudo netstat -tulpn | grep LISTEN
+sudo ss -tulpn | grep LISTEN
+sudo lsof -i:22 ## see a specific port such as 22 ##
+sudo nmap -sTU -O IP-address-Here
+
+
+
+Host *
+    AddKeysToAgent yes
+    IdentityFile ~/.ssh/id_rsa
+    
+    
+
