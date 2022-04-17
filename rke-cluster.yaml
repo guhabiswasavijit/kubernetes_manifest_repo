@@ -64,6 +64,7 @@ services:
         healthz-bind-address : 127.0.0.1:10256
         cluster-cidr : 10.43.0.0/16
         log-dir :  "/var/log/"
+        log-file : "kube-proxy.log"
         feature-gates: RotateKubeletServerCertificate=true
         write-config-to : "/etc/kubernetes/kube-proxy.conf"
         v: 4
