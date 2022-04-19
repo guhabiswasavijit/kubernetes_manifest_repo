@@ -5,6 +5,12 @@ lxc config device remove masterNode docker
 lxc storage volume delete docker_lvm masterNode_lvm
 
 lxc storage create docker_lvm lvm
+lxc file pull masterNode/etc/kubernetes/kube-proxy.conf .
+lxc config device add masterNode cluster_configuration disk source=/etc/cluster/config path=/etc/cluster/config
+lxc config device add kubeWorker cluster_configuration disk source=/etc/cluster/config path=/etc/cluster/config
+lxc config device add masterNode cluster_static_content disk source=/etc/cluster/static path=/etc/cluster/static
+lxc config device add kubeWorker cluster_static_content disk source=/etc/cluster/static path=/etc/cluster/static
+
 
 lxc storage volume create docker_lvm masternode_docker_lvm
 lxc config device add masterNode docker disk pool=docker_lvm source=masternode_docker_lvm path=/var/lib/docker

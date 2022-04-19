@@ -56,20 +56,8 @@ services:
         - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins:z"
     scheduler:
       extra_args:
-         v: 4
-    kubeproxy:
-       extra_args:
-        proxy-mode: iptables
-        kubeconfig : "/etc/kubernetes/ssl/kubecfg-kube-proxy.yaml"
-        healthz-bind-address : 127.0.0.1:10256
-        cluster-cidr : 10.43.0.0/16
-        log-dir :  "/var/log/"
-        log-file : "kube-proxy.log"
-        feature-gates: RotateKubeletServerCertificate=true
-        write-config-to : "/etc/kubernetes/kube-proxy.conf"
         v: 4
-       extra_binds:
-        - "/lib/modules:/lib/modules:ro"
+
 network:
     plugin: canal
     options: {}
@@ -87,15 +75,174 @@ ingress:
       app: ingress
       
 addons: |-
+   apiVersion: apps/v1
+   kind: DaemonSet
+   spec:
+     template:
+       spec:
+         containers:
+          - name: "kube-nginx-proxy"
+          image: "kylemcc/kube-nginx-proxy:0.1.3"
+          volumeMounts:
+            - name: nginx-proxy-config
+              mountPath: /etc/nginx/proxy.conf
+              subPath: proxy.conf
+            - name: nginx-proxy-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-proxy-config
+          configMap:
+            name: nginx-proxy-conf-v1
     ---
-    apiVersion: v1
-    kind: Pod
+    apiVersion: apps/v1
+    kind: DaemonSet
     metadata:
-      name: nginx-proxy
-      namespace: default
+      labels:
+        k8s-app: kube-proxy
+        addonmanager.kubernetes.io/mode: Reconcile
+      name: kube-proxy
+      namespace: kube-system
     spec:
-      containers:
-      - name: nginx-proxy
-        image: nginx
-        ports:
-        - containerPort: 80
+      selector:
+        matchLabels:
+          k8s-app: kube-proxy
+      updateStrategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 10%
+      template:
+        metadata:
+          labels:
+            k8s-app: kube-proxy
+        spec:
+          priorityClassName: system-node-critical
+          hostNetwork: true
+          nodeSelector:
+            kubernetes.io/os: linux
+            node.kubernetes.io/kube-proxy-ds-ready: "true"
+          tolerations:
+          - operator: "Exists"
+            effect: "NoExecute"
+          - operator: "Exists"
+            effect: "NoSchedule"
+          containers:
+          - name: kube-proxy
+            image: k8s.gcr.io/kube-proxy:v1.23.3
+            command:
+            - /usr/local/bin/kube-proxy
+            - '--config=/etc/cluster/config/kube-proxy.conf'
+            - '--hostname-override=$(NODE_NAME)  1>>/var/log/kube-proxy.log 2>&1'
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          resources: 
+            requests:
+              memory: "32Mi"
+              cpu: "125m"
+            limits:
+              memory: "64Mi"
+              cpu: "250m"
+            securityContext:
+              privileged: true
+            volumeMounts:
+            - mountPath: /var/log
+              name: varlog
+              readOnly: false
+            - mountPath: /run/xtables.lock
+              name: xtables-lock
+              readOnly: false
+            - mountPath: /lib/modules
+              name: lib-modules
+              readOnly: true
+          volumes:
+          - name: varlog
+            hostPath:
+              path: /var/log
+          - name: xtables-lock
+            hostPath:
+              path: /run/xtables.lock
+              type: FileOrCreate
+          - name: lib-modules
+            hostPath:
+              path: /lib/modules
+          serviceAccountName: kube-proxy
+       ---
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: kube-proxy
+        namespace: kube-system
+        labels:
+          addonmanager.kubernetes.io/mode: Reconcile
+      ---
+      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: system:kube-proxy
+        labels:
+          addonmanager.kubernetes.io/mode: Reconcile
+      subjects:
+        - kind: ServiceAccount
+          name: kube-proxy
+          namespace: kube-system
+      roleRef:
+        kind: ClusterRole
+        name: system:node-proxier
+        apiGroup: rbac.authorization.k8s.io
+     ---
+     apiVersion: v1
+     kind: ConfigMap
+     metadata:
+       name: nginx-proxy-conf-v1
+     data:
+      proxy.conf: |-
+        # HTTP 1.1 support
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $proxy_connection;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+        proxy_read_timeout 10m;
+        client_max_body_size 25m;
+      nginx.conf: |-
+        user  nginx;
+        worker_processes  2;
+        daemon off;
+        
+        error_log  /var/log/nginx/error.log warn;
+        pid        /var/run/nginx.pid;
+        
+        
+        events {
+            worker_connections  1024;
+            multi_accept on;
+        }
+        http {
+            server_names_hash_bucket_size 128;
+            include       /etc/nginx/mime.types;
+            default_type  application/octet-stream;
+        
+            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                              '$status $body_bytes_sent "$http_referer" '
+                              '"$http_user_agent" "$http_x_forwarded_for"';
+        
+            access_log  /var/log/nginx/access.log  main;
+            add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control';
+            add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+            add_header 'Access-Control-Allow-Origin' '*';
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+            sendfile        on;
+            keepalive_timeout  65;
+            gzip  on;
+            include /etc/nginx/conf.d/*.conf;
+        }
+                
