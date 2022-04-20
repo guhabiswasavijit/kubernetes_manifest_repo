@@ -63,6 +63,7 @@ services:
          v: 4
        extra_binds:
         - "/lib/modules:/lib/modules:ro"
+        - "/etc/cluster/config:/etc/cluster/config:ro"
 network:
     plugin: canal
     options: {}
