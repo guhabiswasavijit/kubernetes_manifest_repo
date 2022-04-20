@@ -45,6 +45,16 @@ data:
             }
         ]
     }
+
+  # Flannel network configuration. Mounted into the flannel container.
+  net-conf.json: |
+    {
+      "Network": "10.244.0.0/16",
+      "Backend": {
+        "Type": "vxlan"
+      }
+    }
+
 ---
 
 # This manifest installs the calico/node container, as well
@@ -147,3 +157,56 @@ spec:
               name: cni-bin-dir
             - mountPath: /host/etc/cni/net.d
               name: cni-net-dir
+        # This container runs flannel using the kube-subnet-mgr backend
+        # for allocating subnets.
+        - name: kube-flannel
+          image: quay.io/coreos/flannel:v0.9.1
+          command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr" ]
+          securityContext:
+            privileged: true
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: FLANNELD_IFACE
+              valueFrom:
+                configMapKeyRef:
+                  name: canal-config
+                  key: canal_iface
+            - name: FLANNELD_IP_MASQ
+              valueFrom:
+                configMapKeyRef:
+                  name: canal-config
+                  key: masquerade
+          volumeMounts:
+          - name: run
+            mountPath: /run
+          - name: flannel-cfg
+            mountPath: /etc/kube-flannel/
+      volumes:
+        # Used by calico/node.
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: var-run-calico
+          hostPath:
+            path: /var/run/calico
+        # Used to install CNI.
+        - name: cni-bin-dir
+          hostPath:
+            path: /opt/cni/bin
+        - name: cni-net-dir
+          hostPath:
+            path: /etc/cni/net.d
+        # Used by flannel.
+        - name: run
+          hostPath:
+            path: /run
+        - name: flannel-cfg
+          configMap:
+            name: canal-config
