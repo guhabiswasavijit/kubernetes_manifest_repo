@@ -76,7 +76,6 @@ spec:
       labels:
         k8s-app: canal
       annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
         scheduler.alpha.kubernetes.io/tolerations: |
           [{"key": "dedicated", "value": "master", "effect": "NoSchedule" },
            {"key": "CriticalAddonsOnly", "operator": "Exists"}]
