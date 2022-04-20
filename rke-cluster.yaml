@@ -59,7 +59,7 @@ services:
         v: 4
     kubeproxy:
        extra_args:
-         config : "/etc/cluster/config/kube-proxy.conf"
+         config : "/etc/cluster/config/kube-proxy.yaml"
          v: 4
        extra_binds:
         - "/lib/modules:/lib/modules:ro"
