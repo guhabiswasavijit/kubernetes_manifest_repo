@@ -5,7 +5,7 @@ clientConnection:
   acceptContentTypes: ""
   burst: 10
   contentType: application/vnd.kubernetes.protobuf
-  kubeconfig: /etc/kubernetes/ssl/kubecfg-kube-proxy.yaml
+  kubeconfig: /etc/cluster/config/kube_config_rke-cluster.yaml
   qps: 5
 clusterCIDR: 10.43.0.0/16
 configSyncPeriod: 15m0s
