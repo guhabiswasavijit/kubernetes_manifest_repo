@@ -1,7 +1,7 @@
 
 mysqld.cnf
 ---- entry ----------
-bind-address=0.0.0.1
+bind-address=0.0.0.0
 ------------------- 
 CREATE USER mysql@'%' IDENTIFIED BY 'Swam2@mysql';
 GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%';

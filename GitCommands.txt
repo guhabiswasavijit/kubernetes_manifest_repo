@@ -21,3 +21,11 @@ git push kubernetes_manifest_repo
 
 
 GitHub Personal Access Token: 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
+
+git credential-osxkeychain
+curl -O http://github-media-downloads.s3.amazonaws.com/osx/git-credential-osxkeychain $ sudo mv git-credential-osxkeychain /usr/local/bin/
+chmod u+x /usr/local/bin/git-credential-osxkeychain
+git config --global credential.helper osxkeychain
+git config --global user.email "guhabiswas.avijit@gmail.com"
+git config --global user.password "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"
+git config --global user.name "guhabiswasavijit"
