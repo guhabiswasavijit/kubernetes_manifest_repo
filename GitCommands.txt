@@ -19,6 +19,14 @@ git commit -m "Kubernetes Manifest Demo"
 git branch -m main
 git push kubernetes_manifest_repo
 
+git init
+git remote add SpringBootPdf_repo https://github.com/guhabiswasavijit/SpringBootPdf.git
+git pull SpringBootPdf_repo main
+git add --all
+git commit -m "SpringBootPdf Demo"
+git branch -m main
+git push SpringBootPdf_repo
+
 
 GitHub Personal Access Token: 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
 

@@ -3,12 +3,13 @@ mysqld.cnf
 ---- entry ----------
 bind-address=0.0.0.0
 ------------------- 
+select user, host, password from mysql.user;
 CREATE USER mysql@'%' IDENTIFIED BY 'Swam2@mysql';
 GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%';
 flush privileges;
 ---------------------------------
 ssh -fN avijit@192.168.42.171 -L 3336:192.168.42.171:3306 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
-mysql -h 127.0.0.1 -P 3337 -u mysql -p
+mysql -h 127.0.0.1 -P 3336 -u mysql -p
 ssh avijit@192.168.42.171 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
 mysqladmin -u root -p create jr_repo_db
 
@@ -70,7 +71,7 @@ mysql --host=127.0.0.1 --port=3306 --user=root --database=lportal --password=Lot
 jdbc:mysql://127.0.0.1:3306/lportal?allowPublicKeyRetrieval=true&useSSL=false
 
 ------------------mysql install RHEL--------------------
-ssh -fN root@192.168.148.43 -L 3336:192.168.148.43:3306 -i '~\.ssh\id_rsa'
+ssh -fN root@192.168.157.43 -L 3336:192.168.157.43:3306 -i '~\.ssh\id_rsa'
 yum -y install @mysql
 systemctl start mysqld
 systemctl enable --now mysqld
