@@ -1,0 +1,15 @@
+snap services lxd
+snap restart lxd
+snap restart lxd.daemon
+snap restart --reload lxd.daemon
+snap stop --disable lxd.daemon
+snap start --enable lxd.daemon
+snap logs lxd
+snap logs lxd.daemon
+snap logs -n=all lxd.daemon
+snap logs lxd -f
+lxd cluster edit
+
+
+
+lxc launch --target lxd-node ubuntu:20.04 masterNode

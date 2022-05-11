@@ -1,0 +1,145 @@
+nodes:
+    - address: 10.1.50.38
+      user: root
+      role:
+        - controlplane
+        - etcd
+      hostname_override: masternode.cluster.local
+      port: 22
+    - address: 10.1.50.252
+      user: root
+      role:
+        - worker
+      hostname_override: kubeWorker.cluster.local
+      port: 22
+
+
+ignore_docker_version: false
+ssh_key_path: /home/admin/.ssh/id_rsa
+
+private_registries:
+    - url: docker.io
+      user: avijit1979
+      password: Lotus2ibm
+cluster_name: k8s-playground
+
+system_images:
+  etcd: rancher/mirrored-coreos-etcd:v3.4.16-rancher1
+  alpine: rancher/rke-tools:v0.1.78
+  nginx_proxy: rancher/rke-tools:v0.1.78
+  cert_downloader: rancher/rke-tools:v0.1.78
+  kubernetes_services_sidecar: rancher/rke-tools:v0.1.78
+  kubedns: rancher/mirrored-k8s-dns-kube-dns:1.17.4
+  dnsmasq: rancher/mirrored-k8s-dns-dnsmasq-nanny:1.17.4
+  kubedns_sidecar: rancher/mirrored-k8s-dns-sidecar:1.17.4
+  kubedns_autoscaler: rancher/mirrored-cluster-proportional-autoscaler:1.8.3
+  coredns: rancher/mirrored-coredns-coredns:1.8.4
+  coredns_autoscaler: rancher/mirrored-cluster-proportional-autoscaler:1.8.3
+  nodelocal: rancher/mirrored-k8s-dns-node-cache:1.18.0
+  kubernetes: rancher/hyperkube:v1.21.8-rancher2
+  flannel: rancher/mirrored-coreos-flannel:v0.15.1
+  flannel_cni: rancher/flannel-cni:v0.3.0-rancher6
+  calico_node: rancher/mirrored-calico-node:v3.19.2
+  calico_cni: rancher/mirrored-calico-cni:v3.19.2
+  calico_controllers: rancher/mirrored-calico-kube-controllers:v3.19.2
+  calico_ctl: rancher/mirrored-calico-ctl:v3.19.2
+  calico_flexvol: rancher/mirrored-calico-pod2daemon-flexvol:v3.19.2
+  canal_node: rancher/mirrored-calico-node:v3.19.2
+  canal_cni: rancher/mirrored-calico-cni:v3.19.2
+  canal_controllers: rancher/mirrored-calico-kube-controllers:v3.19.2
+  canal_flannel: rancher/mirrored-coreos-flannel:v0.15.1
+  canal_flexvol: rancher/mirrored-calico-pod2daemon-flexvol:v3.19.2
+  weave_node: weaveworks/weave-kube:2.8.1
+  weave_cni: weaveworks/weave-npc:2.8.1
+  pod_infra_container: rancher/mirrored-pause:3.4.1
+  ingress: rancher/nginx-ingress-controller:nginx-0.49.3-rancher1
+  ingress_backend: rancher/mirrored-nginx-ingress-controller-defaultbackend:1.5-rancher1
+  ingress_webhook: rancher/mirrored-ingress-nginx-kube-webhook-certgen:v1.1.1
+  metrics_server: rancher/mirrored-metrics-server:v0.5.0
+  windows_pod_infra_container: rancher/kubelet-pause:v0.1.6
+  aci_cni_deploy_container: noiro/cnideploy:5.1.1.0.1ae238a
+  aci_host_container: noiro/aci-containers-host:5.1.1.0.1ae238a
+  aci_opflex_container: noiro/opflex:5.1.1.0.1ae238a
+  aci_mcast_container: noiro/opflex:5.1.1.0.1ae238a
+  aci_ovs_container: noiro/openvswitch:5.1.1.0.1ae238a
+  aci_controller_container: noiro/aci-containers-controller:5.1.1.0.1ae238a
+  aci_gbp_server_container: noiro/gbp-server:5.1.1.0.1ae238a
+  aci_opflex_server_container: noiro/opflex-server:5.1.1.0.1ae238a
+
+services:
+    etcd:
+      image: rancher/coreos-etcd:v3.4.16-rancher1
+      extra_args: {}
+      extra_binds: []
+      external_urls: []
+      ca_cert: ""
+      cert: ""
+      key: ""
+      path: ""
+      snapshot: false
+      retention: ""
+      creation: ""
+    kube-api:
+      image: rancher/hyperkube:v1.23.5-rancher1
+      service_cluster_ip_range: 10.43.0.0/16
+      service_node_port_range: 30000-32767    
+      pod_security_policy: false
+      extra_args:
+        audit-log-path: "-"
+        delete-collection-workers: 3
+        v: 4
+    kube-controller:
+      image: rancher/hyperkube:v1.23.5-rancher1
+      cluster_cidr: 10.42.0.0/16
+      service_cluster_ip_range: 10.43.0.0/16
+    kubelet:
+      image: hyperkube:v1.23.5-rancher1
+      cluster_domain: cluster.local
+      cluster_dns_server: 10.43.0.10
+      fail_swap_on: false
+      extra_args:
+        max-pods: 250
+      extra_binds:
+        - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
+    kubeproxy:
+       extra_args:
+        proxy-mode: iptables
+        kubeconfig : "/etc/kubernetes/ssl/kubecfg-kube-proxy.yaml"
+        healthz-bind-address : 127.0.0.1:10256
+        cluster-cidr : 10.43.0.0/16
+        log-dir :  "/var/log/"
+        log-file : "kube-proxy.log"
+        feature-gates: RotateKubeletServerCertificate=true
+        write-config-to : "/etc/kubernetes/kube-proxy.conf"
+        v: 4
+       extra_binds:
+        - "/lib/modules:/lib/modules:ro"
+network:
+    plugin: canal
+    options: {}
+    authentication:
+      strategy: x509
+      options: {}
+      sans:
+        - "masternode.cluster.local"
+        - "kubeWorker.cluster.local"
+dns:
+    provider: coredns
+ingress:
+    provider: nginx
+    node_selector:
+      app: ingress
+      
+addons: |-
+    ---
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx-proxy
+      namespace: default
+    spec:
+      containers:
+      - name: nginx-proxy
+        image: nginx
+        ports:
+        - containerPort: 80

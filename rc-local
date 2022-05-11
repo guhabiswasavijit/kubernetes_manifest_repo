@@ -1,0 +1,2 @@
+rc-update add /etc/local.d/rc.local default
+rc-update add sftp default

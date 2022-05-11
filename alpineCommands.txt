@@ -1,0 +1,63 @@
+apk add --update docker openr
+rc-update add docker boot
+service docker start
+service docker status
+
+rc-service networkmanager start
+rc-update add networkmanager boot
+---------/etc/NetworkManager/NetworkManager.conf------------------
+[main] 
+dhcp=internal
+plugins=ifupdown,keyfile
+
+[ifupdown]
+managed=true
+
+-------------------------------------
+
+nano /etc/ssh/sshd_config
+# Authentication:
+#LoginGraceTime 2m
+PermitRootLogin yes
+#StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
+PubkeyAuthentication yes
+
+
+----------------------------------------
+apk add virtualbox-guest-additions
+modprobe -a vboxsf
+mount -t vboxsf --bind vbox_shared /mnt/outside
+
+
+apk add mysql mysql-client
+/etc/init.d/mariadb setup
+/etc/init.d/mariadb start
+mysql_secure_installation
+
+mysql root password : Swam2@mysql
+ssh -fN root@192.168.81.196 -L 3336:192.168.81.196:3306 -i '~\.ssh\id_rsa'
+CREATE USER 'mysql'@'127.0.0.1' IDENTIFIED BY 'Swam2@mysql';
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'127.0.0.1';
+flush privileges;
+
+apk update	-Update the package list	apk update
+apk upgrade	-Upgrade the system	apk update
+apt ugrade
+apk add pkg	-Add a package	apk add apache
+apk del pkg	-Delete a package	apk del nginx
+apk search -v	-Search for packages	apk search -v
+apk search -v -d 'nginx*‘
+apk search -v 'apache*'
+apk info	-List all installed pacakges	apk info
+apk fix	-Repair package or upgrade it without modifying main dependencies	apk fix
+apk policy pkg	-Show repository policy for packages	apk policy bash
+apk stats
+
+apk add --no-cache bash wget vim sudo curl tar openrc
+deluser --remove-home mysql
+adduser -h /home/mysql -s /bin/bash -G mysql mysql
+echo "mysql:mysql" | chpasswd
+addgroup -S mysql
+su mysql

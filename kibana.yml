@@ -1,0 +1,16 @@
+server.port: 5601
+server.host: "localhost"
+elasticsearch.hosts: ["https://127.0.0.1:9200"]
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "okGWvrBTy-2v253WgQ*_"
+elasticsearch.ssl.certificateAuthorities: ["config/ca.crt"]
+elasticsearch.ssl.verificationMode: certificate
+logging.root.level: debug
+logging.appenders.default:
+   type: file
+   fileName: "/usr/share/elasticsearch/logs/kibana.log"
+   layout:
+     type: json
+path.data: "/usr/share/elasticsearch/data"
+pid.file: "/usr/share/elasticsearch/kibana.pid"
+i18n.locale: "en"

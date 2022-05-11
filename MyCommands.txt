@@ -24,7 +24,11 @@ kubectl logs spring-boot-jwt
 kubectl exec -it mysqldb bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 choco install jdk8
-curl -k -L https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz -s -o | tar -zxf -
+curl -k -L https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz -s -o -| tar -zxf -
+
+curl -# -k -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.2.0-linux-x86_64.tar.gz -s -o -| tar -zxf -
+
+curl -# -k -L https://artifacts.elastic.co/downloads/kibana/kibana-8.2.0-linux-x86_64.tar.gz -s -o -| tar -zxf -
 
 kubectl run spring-boot-jwt --image spring-boot-jwt-img:latest
 D:\software\sts-4.13.0.RELEASE\SpringToolSuite4.exe -vmargs -javaagent:lombok.jar
@@ -52,7 +56,7 @@ kubectl get deployments --all-namespaces
 
 kubectl delete -n default deployment jwt-app
 
-kubectl exec -it spring-boot-jwt bash
+kubectl exec -it mongo-sts-0 bash -n kube-logging
 
 curl -X GET http://127.0.0.1:5000/v2/spring-boot-jwt/tags/list
 
@@ -89,6 +93,10 @@ kubectl delete -n default deployment mysql
 
 kubectl get pods --selector="run=mysql" --output=wide
 
+kubectl expose deployment kibana --type=NodePort --name=kibana -n kube-system
+
+kubectl port-forward --namespace=kube-system service/kibana 5601:5601
+
 
 curl -# -k -o isio-1.11.6.zip https://github.com/istio/istio/releases/download/1.11.6/istio-1.11.6-win.zip
 unzip isio-1.11.6.zip -d isio-1.11.6
@@ -114,10 +122,11 @@ istioctl profile list
 istioctl install --set profile=default
 
 kubectl create namespace java-demo-ns
+kubectl create namespace kube-logging
 
 kubectl exec -it mysql-99c885d8f-f9zw8 bash -n java-demo-ns
 
-kubectl exec -n java-demo-ns -it spring-boot-jwt-7d7f859ff9-86rtd bash
+kubectl exec -n kube-logging -it es-cluster-0 --bash
 
 kubectl delete deployment mysql -n java-demo-ns
 kubectl delete svc mysql-service -n java-demo-ns
@@ -159,6 +168,9 @@ init_module errno 1
 finit_module errno 1
 delete_module errno 1
 
-
+docker cp es-cluster-0:/usr/share/elasticsearch/config/certs/elasticsearch-ssl-http.zip elasticsearch-ssl-http.zip
+kubectl cp kube-logging/es-cluster-0:/usr/share/elasticsearch/config/certs/elasticsearch-ssl-http.zip workspace/elasticsearch-ssl-http.zip
+kubectl rollout status sts/mongo-sts --namespace=kube-logging
+kubectl rollout status ds/fluentd --namespace=kube-logging
 
 

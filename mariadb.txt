@@ -1,0 +1,12 @@
+create user admindb identified by 'Swam2@mysql';
+grant all privileges on *.* to 'admindb';
+select user, host, password from mysql.user;
+---/etc/my.cnf.d/mariadb-server.cnf----------------
+[mariadb]
+datadir=/var/lib/mysql
+default-storage-engine=InnoDB
+loose-mutex-deadlock-detector
+max-connections=20
+------------------------------------------
+choco install mariadb
+choco uninstall mariadb

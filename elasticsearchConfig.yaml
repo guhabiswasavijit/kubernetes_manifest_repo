@@ -1,0 +1,30 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: elasticsearch-config
+  namespace: kube-logging
+data:
+  elasticsearch.yml: |-
+    cluster.name: "elasticsearch-cluster"
+    network.host: 0.0.0.0
+    xpack.security.enabled: true
+    xpack.security.enrollment.enabled: true
+    ingest.geoip.downloader.enabled: false
+    # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
+    xpack.security.http.ssl:
+      enabled: true
+      keystore.path: certs/elasticsearch/http.p12
+    # Enable encryption and mutual authentication between cluster nodes
+    xpack.security.transport.ssl:
+      enabled: false
+      verification_mode: certificate
+      keystore.path: certs/transport.p12
+      truststore.path: certs/transport.p12
+  jvm.options: |-
+    -Xms512m
+    -Xmx512m
+    -XX:+UseG1GC
+    -Djava.io.tmpdir=${ES_TMPDIR}
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+ExitOnOutOfMemoryError
+    -Xlog:gc*,gc+age=trace,safepoint:file=@loggc@:utctime,pid,tags:filecount=32,filesize=64m

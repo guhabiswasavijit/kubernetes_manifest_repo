@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name : kube-logging
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mongodb-cfg
+  namespace: kube-logging
+data:
+ mongod.conf: |-
+   systemLog:
+      destination: file
+      logAppend: true
+      path: /etc/mongod.log
+   storage:
+      dbPath: /data/db
+      journal:
+        enabled: true
+   processManagement:
+      fork: true
+      pidFilePath: /var/run/mongodb/mongod.pid
+      timeZoneInfo: /usr/share/zoneinfo
+   net:
+      port: 27017
+      bindIp: 127.0.0.1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: kube-logging
+  labels:
+    name: mongo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-sts
+  namespace: kube-logging
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: "mongo"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongo
+        image: avijit1979/mongodb:1.0.0
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: mongoadmin
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: secret123
+          - name: MONGO_INITDB_DATABASE
+            value: fluentld
+        ports:
+          - containerPort: 27017
+        volumeMounts:
+          - name: mongo-persistent-storage
+            mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-persistent-storage
+      spec:
+        storageClassName: "standard"
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi

@@ -13,6 +13,6 @@ sudo nmap -sTU -O IP-address-Here
 Host *
     AddKeysToAgent yes
     IdentityFile ~/.ssh/id_rsa
-    
+echo "\n elasticsearch.ssl.certificateAuthorities:config/elasticsearch-ca.pem" >> cat 
     
 

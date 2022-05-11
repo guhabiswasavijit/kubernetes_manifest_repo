@@ -1,0 +1,76 @@
+elasticsearch-certutil ca --pem
+unzip elastic-stack-ca.zip -d config/certs;
+keytool -importcert -trustcacerts -noprompt -keystore config/elastic-stack-ca.p12 \
+-storepass Swam2@ubuntu  -alias elasticsearch-ca -file config/certs/ca/ca.crt
+elasticsearch-certutil cert --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key
+
+keytool -keystore config/elastic-stack-ca.p12 -list
+./bin/elasticsearch-certutil http
+unzip elasticsearch-ssl-http.zip -d config/certs;
+elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
+elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
+elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
+
+curl --cacert ca.crt https://localhost:9200/_cluster/state?pretty -u elastic
+user:elastic
+password:7-oK*NUhm2KL7OR9p0H0
+
+sudo cp config/certs/ca/ca.crt /usr/local/share/ca-certificates/ca.crt
+
+elasticsearch-create-enrollment-token -s kibana --url "https://127.0.0.1:9200"
+
+curl http://localhost:9200/_cluster/state?pretty -u kibana
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout kibana.key -out kibana.csr
+openssl x509 -req -days 365 -CAcreateserial -in kibana.csr	-out kibana.pem\
+ -CA /home/avijit/elasticsearch-8.2.0/config/certs/ca/ca.crt -CAkey /home/avijit/elasticsearch-8.2.0/config/certs/ca/ca.key -extensions v3_ext -extfile csr.conf
+ 
+Changed password for user apm_system
+PASSWORD apm_system = q93AoJx0PYFRy1oeMnrm
+
+Changed password for user kibana_system
+PASSWORD kibana_system = 2ORbX3j5UC5cKNjzaMD4
+
+Changed password for user kibana
+PASSWORD kibana = 2ORbX3j5UC5cKNjzaMD4
+
+Changed password for user logstash_system
+PASSWORD logstash_system = lG62Ol0CYpOzLJV78XUm
+
+Changed password for user beats_system
+PASSWORD beats_system = 6l18nxowfIGuYLmqgZEN
+
+Changed password for user remote_monitoring_user
+PASSWORD remote_monitoring_user = pyAd95f4tiZQYPwIpYat
+
+Changed password for user elastic
+PASSWORD elastic = EKW9hnNjcRH62FYWtMrO
+RUN curl -# -k -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}-linux-x86_64.tar.gz -s -o -| tar -zxf - &&\
+	mv elasticsearch-${ELASTICSEARCH_VERSION} elasticsearch
+RUN chmod +x elasticSearchSetup.sh
+RUN chmod +x elasticsearch
+RUN chmod +x elasticsearch-shard
+RUN chmod +x elasticsearch-plugin
+RUN chmod +x elasticsearch-node
+RUN chmod +x elasticsearch-keystore
+RUN chmod +x elasticsearch-geoip
+RUN chmod +x elasticsearch-env-from-file
+RUN chmod +x elasticsearch-env
+RUN chmod +x elasticsearch-cli
+RUN chmod +x elasticsearch
+RUN chmod +x x-pack-env
+RUN chmod +x x-pack-watcher-env
+RUN chmod +x x-pack-security-env
+RUN chmod +x elasticsearch-users
+RUN chmod +x elasticsearch-syskeygen
+RUN chmod +x elasticsearch-sql-cli-8.2.0.jar
+RUN chmod +x elasticsearch-sql-cli
+RUN chmod +x elasticsearch-setup-passwords
+RUN chmod +x elasticsearch-service-tokens
+RUN chmod +x elasticsearch-saml-metadata
+RUN chmod +x elasticsearch-reset-password
+RUN chmod +x elasticsearch-reconfigure-node
+RUN chmod +x elasticsearch-croneval
+RUN chmod +x elasticsearch-create-enrollment-token
+RUN chmod +x elasticsearch-certutil
+RUN chmod +x elasticsearch-certgen

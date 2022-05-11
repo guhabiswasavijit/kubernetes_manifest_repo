@@ -1,0 +1,3 @@
+sudo mount /dev/sr0 /media/vbox
+pdestate -a
+rm /var/opt/teradata/tdtemp/PanicLoopDetected

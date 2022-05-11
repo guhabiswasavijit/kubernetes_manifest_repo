@@ -1,0 +1,4 @@
+kind create cluster --name k8s-playground --config D:\\workspace\\manifest\\kind-example-config.yaml --image kindest/node:v1.23.3
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kind delete cluster --name k8s-playground
+kubectl cluster-info --context kind-k8s-playground

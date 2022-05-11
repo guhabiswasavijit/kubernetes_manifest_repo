@@ -1,0 +1,21 @@
+bin\elasticsearch-create-enrollment-token.bat --scope kibana
+
+kibana-setup --enrollment-token eyJ2ZXIiOiI4LjEuMyIsImFkciI6WyIxMC4yNDQuMS4yOjkyMDAiXSwiZmdyIjoiZDI0NzYwY2IxMDE4YzcwZWVlNDI0NWFmNzZkODI1ZTA2ZDA3ZjlkMjI5Nzg0Njk5ZWM2MGVlMzY2MGNiZTAwYyIsImtleSI6InZOc0VlWUFCVGRMbTBWWHhCZ3BBOlE3ek5Vb2p3U2NLOEVLS0JyRVpIT3cifQ==
+
+
+elasticsearch-certutil ca
+File Name -  elasticSearchRootCA.p12
+Password - Swam2@elastic
+elasticsearch-certutil cert --ca elasticSearchRootCA.p12 --out ../config/certs/transport.p12
+elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
+elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
+
+elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
+
+curl -XGET 'localhost:9200/app/users/4?pretty'
+
+Kind Cluster elastic Search Node:k8s-playground-worker/172.18.0.3
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout elasticsearch-ca-key.pem -out elasticsearch-ca.pem
+
+openssl x509 -req -days 365 -CAcreateserial -in http-k8s-playground-worker.csr	-out http-k8s-playground-worker.crt -CA elasticsearch-ca.pem -CAkey elasticsearch-ca-key.pem

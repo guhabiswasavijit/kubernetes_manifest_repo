@@ -1,0 +1,14 @@
+{
+  "CN": "kubernetes",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names":[{
+    "C": "IN",
+    "ST": "West Bengal",
+    "L": "Chandannagar",
+    "O": "Seven Pvt Ltd",
+    "OU": "Application"
+  }]
+}
