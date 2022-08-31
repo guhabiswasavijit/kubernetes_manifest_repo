@@ -1,0 +1,22 @@
+for external JNDI access = admin/<secret value="YWRtaW4=" />
+curl -k "http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.32/mysql-connector-java-5.1.32.jar" -o mysql-connector-java.jar
+jboss-cli.bat -c
+module add --name=com.mysql --resources=mysql-connector-java.jar --dependencies=javax.api,javax.transaction.api
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-datasource-class-name=com.mysql.cj.jdbc.MysqlDataSource)
+
+data-source add --name=MySqlDS --driver-name=mysql --jndi-name=java:jboss/datasources/MySqlDS --connection-url=jdbc:mysql://127.0.0.1:3306/finance --user-name=root --password=Swam2@mysql --enabled=true --initial-pool-size=1 --max-pool-size=10 
+
+module add --name=com.mariadb --resources=mariadb-java-client-3.0.3.jar --dependencies=javax.api,javax.transaction.api
+
+module add --name=org.hibernate --resources=hibernate-core-5.6.9.Final.jar
+
+module add --name=com.sun --resources=sun-jndi-ldap.jar
+
+
+/subsystem=logging/logging-profile=deadlyDuos-profile:add
+/subsystem=logging/logging-profile=deadlyDuos-profile/file-handler=ejb-trace-file:add(file={path=>"ejb-trace.log", "relative-to"=>"jboss.server.log.dir"})
+/subsystem=logging/logging-profile=deadlyDuos-profile/file-handler=ejb-trace-file:change-log-level(level="DEBUG")
+/subsystem=logging/logging-profile=deadlyDuos-profile/logger=org.springframework.boot:add(level="DEBUG")
+/subsystem=logging/logging-profile=deadlyDuos-profile/logger=self.heresay:add(level="DEBUG")
+/subsystem=logging/logging-profile=deadlyDuos-profile/logger=org.springframework.boot:assign-handler(name="ejb-trace-file")
+/subsystem=logging/logging-profile=deadlyDuos-profile/logger=self.heresay:assign-handler(name="ejb-trace-file")

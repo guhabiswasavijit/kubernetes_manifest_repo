@@ -75,3 +75,51 @@ show collections
 docker commit mongodb  avijit1979/mongodb:1.0.0
 docker run --name mongodb -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret123 -d avijit1979/mongodb:1.0.0
 docker run --name spring-pdf --rm -e LOG_DIR=/var/log -e OUTPUT_DIR=/opt/JavaApps/ -d spring-boot-pdf:1.0.0
+
+docker run -d --name es762 -p 9200:9200 -e "discovery.type=single-node" elasticsearch:7.6.2
+docker run -d --name wsad -p 80:9080 -p 443:9443 ^
+-v D:\MyProjects\ejb3-example\ear-application\target\ear-application-1.0.ear:/config/dropins/ear-application-1.0.ear websphere-liberty:22.0.0.4-full-java8-ibmjava
+docker run -d --name wsad -p 8081:9080 -p 443:9443 ^
+-v D:\WAR_DEPLOYMENTS\devilsAtWork.war:/config/dropins/devilsAtWork.war wsad:1.0-custom
+docker run -d --name wsad -p 8081:9080 -p 443:9443 ^
+-v D:\WAR_DEPLOYMENTS\devilsAtWork.war:/config/dropins/devilsAtWork.war websphere-liberty:22.0.0.4-full-java8-ibmjava
+docker run -d --name wsad -p 80:9080 -p 443:9443 websphere-liberty:22.0.0.4-full-java8-ibmjava java -version
+mvn archetype:generate -DgroupId=devils.dout -DartifactId=ejb-tiktok
+mvn archetype:generate -DgroupId=devils.dout -DartifactId=core
+mvn archetype:generate -DgroupId=devils.dout -DartifactId=service
+mvn archetype:generate -DgroupId=devils.dout -DartifactId=webapp
+
+
+docker run --rm httpd:2.4 cat /usr/local/apache2/conf/httpd.conf > custom-httpd.conf 
+docker run --rm tomcat:9.0 cat /usr/local/tomcat/conf/tomcat-users.xml > custom-tomcat-users.xml\ cat /usr/local/tomcat/conf/server.xml > custom-server.xml
+
+docker network create -d bridge apache-net
+docker run --rm -d --name kube-tomcat-master --net apache-net  -p 8081:8080 ^
+-v D:\MyProjects\ApacheKube\server.xml:/usr/local/tomcat/conf/server.xml ^
+-v D:\MyProjects\ApacheKube\tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml ^
+-e "CATALINA_OPTS= ${CATALINA_OPTS} -Dnode.name=kube-tomcat-master" tomcat:9.0
+
+export CATALINA_OPTS=" ${CATALINA_OPTS} -Dnode.name=kube-tomcat-master"
+export CATALINA_OPTS=" ${CATALINA_OPTS} -Dnode.name=kube-tomcat-standby"
+
+
+docker build -f Dockerfile-tomcat -t tomcat:9.0-custom .
+docker tag elasticsearch:8.1.9-custom avijit1979/elasticsearch:8.1.9-custom
+docker push avijit1979/elasticsearch:8.1.9-custom
+
+docker build -f Dockerfile-apache2 -t apche:2.6-custom .
+docker run --rm --name apache2 --net apache-net  -p 8081:80 ^
+--mount "src=D:\MyProjects\ApacheKube\envvars,dst=/etc/apache2/envvars,type=bind" apche:2.5-custom
+docker run --rm --name apache2 --net apache-net  -p 8081:80 ^
+--mount "src=D:\MyProjects\ApacheKube\envvars,dst=/etc/apache2/envvars,type=bind" apche:2.4-custom apache2ctl configtest
+
+docker run --rm --name apache2 --net apache-net  -p 8081:80 apche:2.5-custom cat /etc/apache2/envvars
+docker run --rm --name apache2 --net apache-net  -p 8081:80 apche:2.4-custom sudo /etc/init.d/apache2 start
+
+docker build -f Dockerfile -t wsad:2.0-custom .
+
+docker build -f Dockerfile-apache -t httpd:2.4-custom .
+
+docker run -d --name krb5-server -e KRB5_REALM=EXAMPLE.COM -e KRB5_KDC=localhost -e KRB5_PASS=Swam2@kdc -p 88:88 -p 464:464 -p 749:749 avijit1979/krb5-server:1.0.0
+
+addprinc client/localhost@EXAMPLE.COM

@@ -1,0 +1,4 @@
+mvn archetype:generate -DgroupId=self.heresay -DartifactId=rest-yetagain
+mvn archetype:generate -DgroupId=self.heresay -DartifactId=service-yetagain
+mvn archetype:generate -DgroupId=self.heresay -DartifactId=http-yetagain
+mvn archetype:generate -DgroupId=self.heresay -DartifactId=ear-yetagain

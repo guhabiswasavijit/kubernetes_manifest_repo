@@ -1,6 +1,61 @@
 git init
-git remote add Spring-Boot-JWT-Repo https://github.com/guhabiswasavijit/Spring-Boot-JWT-Repo.git
+git remote add SpringBootSockJsRepo https://github.com/guhabiswasavijit/SpringBootSockJsRepo.git
+git pull SpringBootSockJsRepo main
+git add --all
+git commit -m "node kube client"
+git branch -m main
+git push SpringBootSockJsRepo
 
+git init
+git remote add NodeStompRepo https://github.com/guhabiswasavijit/NodeStompRepo.git
+git pull NodeStompRepo main
+git add --all
+git commit -m "node kube server"
+git branch -m main
+git push NodeStompRepo
+
+git init
+git remote add SpringBootKubeAdminServerRepo https://github.com/guhabiswasavijit/SpringBootKubeAdminServer.git
+git pull SpringBootKubeAdminServerRepo main
+git add --all
+git commit -m "spring boot kube client"
+git branch -m main
+git push SpringBootKubeAdminServerRepo
+
+git init
+git remote add JavaKubeAdminClientRepo https://github.com/guhabiswasavijit/JavaKubeClientRepo.git
+git pull JavaKubeAdminClientRepo main
+git add --all
+git commit -m "java kube client"
+git branch -m main
+git push JavaKubeAdminClientRepo
+
+git init
+git remote add JavaKubeAdminServerRepo https://github.com/guhabiswasavijit/JavaKubeAdminServerRepo.git
+git pull JavaKubeAdminServerRepo main
+git add --all
+git commit -m "java kube server"
+git branch -m main
+git push JavaKubeAdminServerRepo
+
+git init
+git remote add spring-boot-remote-ejb-repo https://github.com/guhabiswasavijit/SpringBoot_RemoteEjb.git
+git pull spring-boot-remote-ejb-repo main
+git add --all
+git commit -m "Spring ejb JWT demo"
+git branch -m main
+git push spring-boot-remote-ejb-repo
+
+git init
+git remote add spring-ejb-rest-repo https://github.com/guhabiswasavijit/spring-ejb-rest-repo.git
+git pull spring-ejb-rest-repo main
+git add --all
+git commit -m "Spring ejb JWT demo"
+git branch -m main
+git push spring-ejb-rest-repo
+
+git init
+git remote add Spring-Boot-JWT-Repo https://github.com/guhabiswasavijit/Spring-Boot-JWT-Repo.git
 git pull Spring-Boot-JWT-Repo main
 git add --all
 git commit -m "Spring Boot JWT demo"
@@ -27,6 +82,21 @@ git commit -m "SpringBootPdf Demo"
 git branch -m main
 git push SpringBootPdf_repo
 
+git init
+git remote add SpringBootLog_repo https://github.com/guhabiswasavijit/spring-boot-log-analyzer-repo.git
+git pull SpringBootLog_repo main
+git add --all
+git commit -m "SpringBoot Log Demo"
+git branch -m main
+git push SpringBootLog_repo
+
+git init
+git remote add SpringBootPdf_repo https://github.com/guhabiswasavijit/SpringBootPdf.git
+git pull SpringBootPdf_repo main
+git add --all
+git commit -m "SpringBootPdf Demo"
+git branch -m main
+git push SpringBootPdf_repo
 
 GitHub Personal Access Token: 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
 

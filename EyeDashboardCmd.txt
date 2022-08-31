@@ -1,0 +1,9 @@
+JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
+ && kubectl get nodes -o jsonpath="{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}"
+ 
+ 
+ kubectl get pod test-pod -o custom-columns=CONTAINER:.spec.containers[0].name,IMAGE:.spec.containers[0].image
+ 
+ 
+kubectl get nodes -ocustom-columns=Name:metadata.name,MemoryPressure:status.conditions[0].message,DiskPressure:status.conditions[1].message,PIDPressure:status.conditions[2].message,Status:status.conditions[3].message,^
+CPU:status.capacity.cpu,Memory:status.capacity.memory

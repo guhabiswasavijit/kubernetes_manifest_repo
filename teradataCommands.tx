@@ -1,3 +1,5 @@
 sudo mount /dev/sr0 /media/vbox
 pdestate -a
+/etc/init.d/tpa start
+login account: root/root
 rm /var/opt/teradata/tdtemp/PanicLoopDetected

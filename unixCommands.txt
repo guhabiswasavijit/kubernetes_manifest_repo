@@ -1,3 +1,7 @@
+echo root:root | chpasswd
+su -l mysql
+sudo usermod -d /newhomedir/john john
+sudo deluser --remove-home mysql
 ssh-copy-id root@192.168.139.196
 ssh-keygen -t rsa -b 4096
 cat ~/.ssh/id_rsa.pub | ssh root@192.168.172.196 "touch ~/.ssh/authorized_keys && cat >> ~/.ssh/authorized_keys"
@@ -7,6 +11,7 @@ sudo netstat -tulpn | grep LISTEN
 sudo ss -tulpn | grep LISTEN
 sudo lsof -i:22 ## see a specific port such as 22 ##
 sudo nmap -sTU -O IP-address-Here
+sudo lsof -i -P | grep -i LISTEN | grep <pid>
 
 
 
@@ -14,5 +19,17 @@ Host *
     AddKeysToAgent yes
     IdentityFile ~/.ssh/id_rsa
 echo "\n elasticsearch.ssl.certificateAuthorities:config/elasticsearch-ca.pem" >> cat 
+--- change directoty in git-bash ----------------
+cd D:/MyProjects/ApacheKube
+--------------------------------------------------
+sed -i 's|#ServerRoot|ServerRoot|1' /etc/apache2/apache2.conf && \
+sed -i 's|${APACHE_RUN_DIR}|/var/run/apache2|1' /etc/apache2/apache2.conf  && \
+sed -i 's|${APACHE_PID_FILE}|/var/run/apache2/apache.pid|1' /etc/apache2/apache2.conf  && \
+sed -i 's|${APACHE_RUN_USER}|apache|1' /etc/apache2/apache2.conf  && \
+sed -i 's|${APACHE_RUN_GROUP}|apache|1' /etc/apache2/apache2.conf  && \
+sed -i 's|${APACHE_LOG_DIR}|/var/log/apache2|1' /etc/apache2/apache2.conf && \
+sed -i 's|IncludeOptional conf-enabled|#IncludeOptional conf-enabled|1' /etc/apache2/apache2.conf
+
+sed -i -e 's|#ServerRoot|ServerRoot|1' -e 's|${APACHE_RUN_DIR}|/var/run/apache2|1' -e 's|${APACHE_PID_FILE}|/var/run/apache2/apache.pid|1' -e 's|${APACHE_RUN_USER}|apache|1' -e 's|${APACHE_RUN_GROUP}|apache|1' -e  's|${APACHE_LOG_DIR}|/var/log/apache2|1' -e 's|IncludeOptional conf-enabled|#IncludeOptional conf-enabled|1' apache2-test.conf 
     
 

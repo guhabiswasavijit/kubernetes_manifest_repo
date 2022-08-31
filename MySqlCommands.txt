@@ -1,4 +1,10 @@
+sudo apt-get install libaio1
+sudo dpkg -i mysql-common_8.0.28-1ubuntu21.10_amd64.deb
+sudo dpkg-preconfigure mysql-community-server_8.0.28-1ubuntu21.10_amd64.deb
+sudo dpkg -i mysql-community-server_8.0.28-1ubuntu21.10_amd64.deb
 
+sudo apt-get install libmysqlcppconn-dev
+C:\>"D:\software\mysql-8.0.27-winx64\mysql-8.0.27-winx64\bin\mysqld" --install MySQL --defaults-file=D:\software\mysql-8.0.27-winx64\mysql-8.0.27-winx64\mysqld.cnf
 mysqld.cnf
 ---- entry ----------
 bind-address=0.0.0.0
@@ -79,4 +85,5 @@ systemctl status mysqld
 mysql_secure_installation
 --------------------------------------------------------------
 
-
+create the /etc/systemd/system/mysqld.service.d directory if it does not exist
+in that directory create mysql.service

@@ -1,0 +1,26 @@
+kadmin -p admin/admin@EXAMPLE.COM -w password
+addprinc client/localhost@EXAMPLE.COM
+addprinc HTTP/localhost@EXAMPLE.COM
+addprinc avijit1979@EXAMPLE.COM
+yum -y install krb5-server krb5-libs krb5-workstation
+kdb5_util create -s
+systemctl enable krb5kdc
+systemctl start krb5kdc
+systemctl enable kadmin
+systemctl start kadmin
+nano /var/kerberos/krb5kdc/kadm5.acl
+
+Rhel Kereros Password: Swam@rhel
+sudo apt install krb5-kdc krb5-admin-server
+sudo krb5_newrealm
+sudo nano  /etc/krb5.conf
+sudo systemctl restart krb5-admin-server.service
+
+ssh -fN avijit@192.168.15.154 -L 88:192.168.15.154:88 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
+kinit ubuntu/admin
+
+ktpass -out C:\workspace\spring-security-sso-kerberos\krb-test-workdir\avijit1979.keytab -princ avijit1979@EXAMPLE.LOCAL -mapUser avijit1979 -pass Swam2@ubuntu -crypto all -ptype KRB5_NT_PRINCIPAL
+
+SET JAVA_TOOL_OPTIONS=-Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true
+
+ktab -a [Windows user name]@[Realm name] [Password] -n [Key version number] -k [Keytab file path]
