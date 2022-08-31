@@ -28,3 +28,12 @@ sudo yum update
 sudo yum install snapd
 sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+python3 -m pip install --user ansible
+git clone https://github.com/ansible/ansible.git
+cd ./ansible
+python3 -m pip install --user -r ./requirements.txt
+python3 -m pip install --user argcomplete
+activate-global-python-argcomplete
