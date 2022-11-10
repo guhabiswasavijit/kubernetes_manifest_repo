@@ -1,4 +1,37 @@
 git init
+git remote add HadoopSpringBootHiveRepo https://github.com/guhabiswasavijit/HadoopSpringBootHiveRepo.git
+git pull HadoopSpringBootHiveRepo master
+git add --all
+git commit -m "hadoop hive project"
+git branch -m master
+git push HadoopSpringBootHiveRepo
+
+git init
+git remote add HadoopClientsRepo https://github.com/guhabiswasavijit/HadoopClientsRepo.git
+git pull HadoopClientsRepo main
+git add --all
+git commit -m "hadoop project"
+git branch -m main
+git push HadoopClientsRepo
+
+
+git init
+git remote add HadoopSimpleAuthProjectsRepo https://github.com/guhabiswasavijit/HadoopSimpleAuthProjectRepo.git
+git pull HadoopSimpleAuthProjectsRepo main
+git add --all
+git commit -m "hadoop project"
+git branch -m main
+git push HadoopSimpleAuthProjectsRepo
+
+git init
+git remote add HadoopProjectsRepo https://github.com/guhabiswasavijit/HadoopProjectsRepo.git
+git pull HadoopProjectsRepo main
+git add --all
+git commit -m "hadoop project"
+git branch -m main
+git push HadoopProjectsRepo
+
+git init
 git remote add SpringBootSockJsRepo https://github.com/guhabiswasavijit/SpringBootSockJsRepo.git
 git pull SpringBootSockJsRepo main
 git add --all

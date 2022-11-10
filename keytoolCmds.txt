@@ -1,2 +1,23 @@
 keytool –keystore config/certs/http.jks –genkey –alias kibana
 keytool –keystore config/certs/http.jks –certreq –alias kibana –keyalg rsa –file kibana.csr
+
+keytool -genkey -alias hdfs -keyalg RSA -keystore keyStore.jks -keysize 2048 -storepass changeit
+openssl req -new -x509 -keyout ca-key -out ca-cert | passphrase hdfs
+keytool -keystore keyStore.jks -alias hdfs -certreq -file cert-file
+openssl x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial -passin pass:hdfs
+keytool -keystore keyStore.jks -alias CARoot -import -file ca-cert
+keytool -keystore keyStore.jks -alias hdfs -import -file cert-signed
+keytool -keystore trustStore.jks -alias hdfs -import -file cert-signed
+
+
+openssl genrsa -out hadoopServerCA.key 2048
+openssl req -x509 -new -nodes -key hadoopServerCA.key -sha256 -days 1024 -out hadoopServerCA.pem
+openssl pkcs12 -export -name server-cert -in hadoopServerCA.pem -inkey hadoopServerCA.key -out hadoopServerKeystore.p12
+keytool -import -alias server-cert -file hadoopServerCA.pem -keystore hadoopServer.truststore
+keytool -import -alias client-cert -file hadoopclientCA.pem -keystore server.truststore
+
+openssl genrsa -out hadoopclientCA.key 2048
+openssl req -x509 -new -nodes -key hadoopclientCA.key -sha256 -days 1024 -out hadoopclientCA.pem
+openssl pkcs12 -export -name client-cert -in hadoopclientCA.pem -inkey hadoopclientCA.key -out hadoopClientKeystore.p12
+keytool -import -alias server-cert -file hadoopServerCA.pem  -keystore hadoopClient.truststore
+keytool -import -alias client-cert -file hadoopclientCA.pem -keystore client.truststore

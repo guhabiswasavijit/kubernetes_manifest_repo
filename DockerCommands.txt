@@ -123,3 +123,8 @@ docker build -f Dockerfile-apache -t httpd:2.4-custom .
 docker run -d --name krb5-server -e KRB5_REALM=EXAMPLE.COM -e KRB5_KDC=localhost -e KRB5_PASS=Swam2@kdc -p 88:88 -p 464:464 -p 749:749 avijit1979/krb5-server:1.0.0
 
 addprinc client/localhost@EXAMPLE.COM
+
+docker ps
+docker inspect -f '{{.Id}}' hive-server
+docker cp Paytm_Statement.txt 3eec6eecd496:/opt/Paytm.txt 
+docker cp hbase-server:/opt/hbase/logs/hbase--master-hbase-server.out hbase--master-hbase-server.out
