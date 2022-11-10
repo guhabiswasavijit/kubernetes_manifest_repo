@@ -1,2 +1,4 @@
 keytool –keystore config/certs/http.jks –genkey –alias kibana
 keytool –keystore config/certs/http.jks –certreq –alias kibana –keyalg rsa –file kibana.csr
+
+keytool –keystore application.keystore –genkey –alias wildfly
