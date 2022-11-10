@@ -1,0 +1,18 @@
+curl -X PUT "localhost:9200/ecs-logstash-2022-05-13?pretty" -H 'Content-Type: application/json' -d'
+{
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" },
+	  "@version": { "type": "text" },
+	  "@message": { "type": "text" },
+	  "@logger_name": { "type": "text" },
+	  "@thread_name": { "type": "text" },
+	  "@level": { "type": "text" },
+	  "@level_value": { "type": "text" }
+    }
+  }
+}
+'

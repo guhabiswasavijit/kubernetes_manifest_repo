@@ -1,7 +1,18 @@
 Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess
 Get-Process -Id (Get-NetUDPEndpoint -LocalPort 8080).OwningProcess
 stop-process -Id 18936 -Force
-netstat -a -b -o -n
+netstat -a -b -o -n | findstr 9091
+choco install apache-httpd --params '"/installLocation:C:\workspace\dockerSoftwares\httpd /port:80"'
+driverquery | findstr "Ancillary Function"
+netsh winsock reset > C:\workspace\winsockreset.log
+choco install pkgconfiglite
+Install Java Binaries as Windows Service
+
+Rename WinSW-x64.exe to config file name 
+kubeAdminService.exe install
+kubeAdminService.exe uninstall
+kubeAdminService.exe start
+kubeAdminService.exe stop
 
 --------------------------------------------------------------
 7-Zip [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
@@ -41,3 +52,7 @@ Usage: 7z <command> [<switches>...] <archive_name> [<file_names>...]
   -x[r[-|0]]]{@listfile|!wildcard}: eXclude filenames
   -y: assume Yes on all queries
 ------------------------------------------------------------------------
+
+
+net stop winnat
+net start winnat

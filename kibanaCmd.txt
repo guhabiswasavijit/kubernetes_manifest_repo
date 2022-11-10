@@ -19,3 +19,14 @@ Kind Cluster elastic Search Node:k8s-playground-worker/172.18.0.3
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout elasticsearch-ca-key.pem -out elasticsearch-ca.pem
 
 openssl x509 -req -days 365 -CAcreateserial -in http-k8s-playground-worker.csr	-out http-k8s-playground-worker.crt -CA elasticsearch-ca.pem -CAkey elasticsearch-ca-key.pem
+
+GET /ecs-logstash-2022-05-13/_search -H 'Content-Type: application/json' -d'
+{
+    "query": {
+        "match_all": {}
+    }
+}
+DELETE /ecs-logstash-2022-05-13/_doc/X1Spu4ABXzQEABTZRKMd
+GET /_cat/indices
+POST ecs-logstash-2022-05-13/_doc
+{"@timestamp":"2022-05-13T07:29:27.076+05:30","@version":"1","message":"Entering dev.simplesolution.pdf.service.impl.PdfGenerateServiceImpl generatePdfFile with PARAMS:quotation,customer Customer(companyName=Simple Solution, contactName=John Doe, address=123, Simple Street, email=john@simplesolution.dev, phone=123 456 789)\nquoteItems QuoteItem(description=Test Quote Item 1, quantity=1, unitPrice=100.0, total=100.0)QuoteItem(description=Test Quote Item 2, quantity=4, unitPrice=500.0, total=2000.0)QuoteItem(description=Test Quote Item 3, quantity=2, unitPrice=200.0, total=400.0),quotation.pdf","logger_name":"Application-Info","thread_name":"main","level":"DEBUG","level_value":10000}

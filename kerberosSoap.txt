@@ -1,0 +1,31 @@
+<wsp:Policy xmlns:wsp="..." xmlns:sp="...">
+
+<sp:SymmetricBinding>
+
+<wsp:Policy>
+
+<sp:ProtectionToken>
+
+<wsp:Policy>
+
+<sp:Kerberos sp:IncludeToken=".../IncludeToken/Once" />
+<wsp:Policy>
+
+<sp:WSSKerberosV5ApReqToken11/>
+
+ <wsp:Policy>
+
+</sp:Kerberos>
+
+</wsp:Policy>
+
+</sp:ProtectionToken>
+
+
+
+</wsp:Policy>
+
+</sp:SymmetricBinding>
+
+
+</wsp:Policy>

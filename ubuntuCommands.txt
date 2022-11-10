@@ -3,3 +3,62 @@ apt-get install build-essential linux-headers-$(uname -r)
 apt-get install virtualbox-guest-x11
 
 mount -o loop path/to/iso/file/YOUR_ISO_FILE.ISO /media/iso
+apt-get install apt-file
+apt-get -d -o dir::cache=`pwd` -o Debug::NoLocking=1 install package
+apt-get install -d -o=dir::cache=/tmp whateveryouwant
+
+-----------Install a package-----------------------
+sudo dpkg -i {package_name}
+------------Remove a package--------------------
+sudo dpkg -r {package_name}
+----------Remove a package and its configuration files----------------
+sudo dpkg -P {package_name}
+
+--------List all installed packages------------
+dpkg -l | less
+
+-----------Check if the package is installed or not-------------------
+dpkg -l {package_name}
+--------Check if the package is installed or not, and if it is, launch it------------------
+
+dpkg -l | vlc
+
+--------See whether a package is installed or not-----------------
+sudo dpkg -S {package_name}
+
+------------Install a *.deb package from a specified location---------
+sudo dpkg -R --install {package_location}
+
+----------Show package details---------------------
+dpkg -p {package_name}
+
+---------View the content of a package-------------------------
+sudo dpkg -c {package_name}
+
+-----------Extract the *.deb package file--------------------
+
+dpkg -x {package_name} {location_were_to_extract}
+
+---------Extract and display the filenames contained in a package-----------------------------
+
+dpkg -X {package_name} {location_were_to_extract}
+ 
+---------Display information about a package-------------------
+dpkg -I {package_name}
+
+----Reconfigure an already installed package------------------
+dpkg-reconfigure reconfigures packages after they already have been installed
+
+dpkg-reconfigure postfix
+
+----While dpkg -i indeed installs the package, it doesn't do any automatic dependency resolution. Meanwhile there are two other alternatives, using gdebi or the apt-get tool-----------
+
+sudo apt-get install /path/to/package.deb
+
+----A handy tip when installing a program like Libreoffice which has multiple .deb files in a folder is to use-------------
+
+sudo dpkg -i *.deb
+
+----------The gdebi command-line solution-----------------------
+sudo gdebi skype.deb
+sudo apt install gdebi-core

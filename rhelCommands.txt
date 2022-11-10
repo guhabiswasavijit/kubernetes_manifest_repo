@@ -20,3 +20,20 @@ curl -# -k -o docker-ce-rootless-extras-20.10.10-3.el8.s390x.rpm https://downloa
 sudo yum install /path/to/package.rpm
 
 dnf install tar bzip2 kernel-devel-$(uname -r) kernel-headers perl gcc make elfutils-libelf-devel
+
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf upgrade
+sudo subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"
+sudo yum update
+sudo yum install snapd
+sudo systemctl enable --now snapd.socket
+sudo ln -s /var/lib/snapd/snap /snap
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+python3 -m pip install --user ansible
+git clone https://github.com/ansible/ansible.git
+cd ./ansible
+python3 -m pip install --user -r ./requirements.txt
+python3 -m pip install --user argcomplete
+activate-global-python-argcomplete

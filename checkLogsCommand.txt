@@ -1,0 +1,20 @@
+sudo tail -f /var/log/apache2/access.log
+sudo tailf /var/log/apache2/access.log
+sudo tail -F /var/log/apache2/access.log
+sudo tail -n2 -f /var/log/apache2/access.log
+$ sudo apt install multitail   [On Debian & Ubuntu]
+$ sudo yum install multitail   [On RedHat & CentOS]
+$ sudo dnf install multitail   [On Fedora 22+ version]
+sudo multitail /var/log/apache2/access.log /var/log/apache2/error.log
+
+---lnav Command – Monitor Multiple Log Files in Real Time-----
+Another interesting command, similar to multitail command is the lnav command. Lnav utility can also watch and follow multiple files and display their content in real time.
+
+To install lnav utility in Debian and RedHat based Linux distributions by issuing the below command.
+
+$ sudo apt install lnav   [On Debian & Ubuntu]
+$ sudo yum install lnav   [On RedHat & CentOS]
+$ sudo dnf install lnav   [On Fedora 22+ version]
+----------------------------------------------------------------------
+sudo lnav /var/log/apache2/access.log /var/log/apache2/error.log
+sudo less +F  /var/log/apache2/access.log
