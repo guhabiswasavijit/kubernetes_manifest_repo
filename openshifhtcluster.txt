@@ -1,0 +1,8 @@
+ssh avijit@192.168.12.230 -i 'C:\Users\Avijit GuhaBiswas\.ssh\id_rsa'
+wget https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
+sudo tar -xpvf crc-linux-amd64.tar.xz
+cd crc-linux-1.42.0-amd64/
+sudo cp crc /usr/local/bin/
+crc version
+crc setup
+crc start -p pull-secret
