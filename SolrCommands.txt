@@ -1,0 +1,14 @@
+[Unit]
+Description=Apache SOLR
+After=network.target
+
+[Service]
+User=solr
+PIDFile==/opt/solr/run/solr-8983.pid
+Environment=SOLR_INCLUDE=/opt/solr/bin/solr.in.sh
+ExecStart=/opt/solr/bin/solr start -s /opt/solr/data -h 127.0.0.1 -p 8983 -d server -z 127.0.0.1:2181
+ExecStop=/opt/solr/bin/solr stop
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
