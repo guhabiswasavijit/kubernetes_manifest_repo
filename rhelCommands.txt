@@ -37,3 +37,11 @@ cd ./ansible
 python3 -m pip install --user -r ./requirements.txt
 python3 -m pip install --user argcomplete
 activate-global-python-argcomplete
+
+subscription-manager repos --enable=rhel-8-for-x86_64-appstream-rpms
+subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms
+subscription-manager repos --enable=codeready-builder-for-rhel-8-x86_64-rpms
+
+sudo dnf config-manager --add-repo=https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo
+
+sudo dnf module install nvidia-driver:latest

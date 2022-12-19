@@ -1,6 +1,7 @@
 keytool –keystore config/certs/http.jks –genkey –alias kibana
 keytool –keystore config/certs/http.jks –certreq –alias kibana –keyalg rsa –file kibana.csr
 
+keytool –keystore application.keystore –genkey –alias wildfly
 keytool -genkey -alias hdfs -keyalg RSA -keystore keyStore.jks -keysize 2048 -storepass changeit
 openssl req -new -x509 -keyout ca-key -out ca-cert | passphrase hdfs
 keytool -keystore keyStore.jks -alias hdfs -certreq -file cert-file
@@ -21,3 +22,4 @@ openssl req -x509 -new -nodes -key hadoopclientCA.key -sha256 -days 1024 -out ha
 openssl pkcs12 -export -name client-cert -in hadoopclientCA.pem -inkey hadoopclientCA.key -out hadoopClientKeystore.p12
 keytool -import -alias server-cert -file hadoopServerCA.pem  -keystore hadoopClient.truststore
 keytool -import -alias client-cert -file hadoopclientCA.pem -keystore client.truststore
+
