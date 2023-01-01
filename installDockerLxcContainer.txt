@@ -1,4 +1,4 @@
-sudo apt-get install ca-certificates gnupg lsb-release build-essential net-tools software-properties-common curl git
+sudo apt-get install -y ca-certificates gnupg lsb-release build-essential net-tools software-properties-common curl git openssh-server openssh-client nano
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
@@ -15,7 +15,7 @@ lxc storage volume create docker masterNode
 lxc config device remove masterNode docker
 lxc storage volume delete docker_lvm masterNode_lvm
 
-lxc storage create docker_lvm lvm
+lxc storage create hadoop_lvm lvm
 lxc file pull masterNode/etc/kubernetes/kube-proxy.conf .
 lxc config device add masterNode cluster_configuration disk source=/etc/cluster/config path=/etc/cluster/config
 lxc config device add kubeWorker cluster_configuration disk source=/etc/cluster/config path=/etc/cluster/config
@@ -84,3 +84,100 @@ name: default
 
 lxc config device add masterNode eth0 nic nictype=bridged parent=br0 name=eth0
 lxc config device remove masterNode cluster_configuration
+lxc launch images:ubuntu/20.04 apacheMasterNode --profile lxcApacheTomcatProfile
+lxc profile create lxcApacheTomcatProfile 
+lxc profile edit lxcApacheTomcatProfile < lxcConfigProfileApache.yaml
+lxc profile create lxcHadoopProfile 
+lxc profile edit lxcHadoopProfile < lxcConfigProfile.yaml
+
+lxc info --show-log apacheMasterNode
+
+lxc exec apacheMasterNode bash
+touch /etc/ssh/sshd_config.d/ssh-server.conf
+
+sudo apt install apache2
+
+openssl req -x509 -new -nodes -key hadoopclientCA.key -sha256 -days 1024 -out hadoopclientCA.pem
+
+openssl req -out apacheMasterNode.csr -newkey rsa:2048 -nodes -keyout apacheMasterNode.key -config csr.conf
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout apacheMasterNode-key.pem -out apacheMasterNode.pem -subj "/CN=apacheMasterNode"
+
+apt install -y php libapache2-mod-php php-mysql
+
+lxc file push ./csr.conf apacheMasterNode /etc/ssl/certs/
+
+openssl req -noout -text -in apacheMasterNode.csr
+openssl x509 -req -days 365 -set_serial 01 -in apacheMasterNode.csr	-out apacheMasterNode.pem -CAkey apacheMasterNode.key
+openssl x509 -in apacheMasterNode.pem -noout -text
+yum list installed
+
+<VirtualHost *:80>
+    DocumentRoot "/www/example2"
+    ServerName apacheMasterNode
+
+    # Other directives here
+</VirtualHost>
+
+
+lxc config device add apacheMasterNode apache_static_files disk source=/etc/apache2/static path=/var/www/html
+lxc restart apacheMasterNode
+
+
+<Proxy balancer://ac-cluster>
+  Allow from all 
+  BalancerMember https://ENTM1.example.com:18443 route=1
+  BalancerMember https://ENTM2.example.com:18443 route=2 
+  ProxySet stickysession=ROUTEID
+</Proxy>
+<VirtualHost *:443>
+   ProxyPass / balancer://ac-cluster/ lbmethod=byrequests stickysession=ROUTEID
+   ## You have to specify one for each of your primary and load balancing Enterprise Management Server.
+   ProxyPassReverse / http://ENTM1.example.com:18080/
+   ProxyPassReverse / http://ENTM2.example.com:18080/
+</VirtualHost> 
+
+lxc launch images:ubuntu/20.04 tomcatFirstNode --profile lxcApacheTomcatProfile
+lxc launch images:ubuntu/20.04 tomcatSecondNode --profile lxcApacheTomcatProfile
+lxc launch images:ubuntu/20.04 mysql-server --profile lxcApacheTomcatProfile
+lxc launch images:ubuntu/20.04 mariadb-server --profile lxcApacheTomcatProfile
+lxc launch images:ubuntu/20.04 kdc-server --profile lxcApacheTomcatProfile
+
+
+lxc config device add mysql-server mysql_data_files disk source=/opt/data/mysql path=/var/lib/mysql --chown -R mysql:msql
+
+
+lxc storage create mysql-storage-lvm lvm
+lxc storage volume create mysql-storage-lvm mysql-server-storage
+lxc config device add mysql-server mysql-data-files disk pool=mysql-storage-lvm source=mysql-server-storage path=/var/lib/mysql
+lxc config device remove mysql-server mysql-data-files
+
+lxc file push ./apache-tomcat-9.0.70.tar.gz tomcatFirstNode/opt/Download/
+lxc file push ./apache-tomcat-9.0.70.tar.gz tomcatSecondNode/opt/Download/
+lxc file push ./database.sql mysql-server/opt/Download/
+
+Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+<Proxy "balancer://tomcatCluster">
+    BalancerMember "ajp://192.168.122.116:8009" route=tomcatFirstNode
+    BalancerMember "ajp://192.168.122.79:8009" route=tomcatSecondNode
+    ProxySet stickysession=ROUTEID
+</Proxy>
+ProxyPass        "/api" "balancer://tomcatCluster"
+ProxyPassReverse "/api" "balancer://tomcatCluster"
+
+
+apt install -y krb5-admin-server  krb5-config  krb5-k5tls krb5-kdc krb5-user
+
+apt install -y krb5-strength krb5-sync-plugin krb5-sync-tools krb5-user kstart
+
+apt install -y krb5-auth-dialog krb5-doc krb5-gss-samples krb5-kdc-ldap krb5-kpropd krb5-locales krb5-multidev krb5-otp krb5-pkinit
+
+kdb5_util create -s
+kdc-server database master password Swam2@kdc
+
+[logging]
+  kdc=FILE:/var/kdc/kdc.log
+  admin_server=FILE:/var/kdc/kadmin.log
+
+apt install -y mariadb-server mariadb-plugin-gssapi-server
+
+apt install -y mariadb-client mariadb-plugin-gssapi-client phpmyadmin

@@ -1,0 +1,29 @@
+name: lxcHadoopProfile
+config:
+  linux.kernel_modules: ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,xt_conntrack,br_netfilter
+  security.nesting: "true"
+  security.syscalls.intercept.mknod: "true"
+  security.syscalls.intercept.setxattr: "true"
+  raw.lxc: |-
+    lxc.cap.drop=
+    lxc.cgroup.devices.allow=a
+    lxc.mount.auto=proc:rw sys:rw cgroup:rw
+  raw.seccomp: |-
+    2
+    denylist
+    reject_force_umount
+    kexec_load errno 1
+    open_by_handle_at errno 1
+    init_module errno 1
+    finit_module errno 1
+    delete_module errno 1
+devices:
+  eth0:
+    nictype: bridged
+    parent: virbr0
+    type: nic
+  root:
+    path: /
+    pool: hadoop_lvm
+    type: disk
+  

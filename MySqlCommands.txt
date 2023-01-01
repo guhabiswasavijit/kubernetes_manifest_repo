@@ -40,7 +40,7 @@ mysql --user="username" --database="databasename" --password="yourpassword" < "f
 .to("mysql:{{mysql_db_name}}?host={{mysql_host}}&port={{mysql_port}}&userName={{mysql_user}}&userPassword={{mysql_password}}&scriptDir={{output_directory}}&scriptFile={{output_file_name}}")
 
 
-mysql --host=127.0.0.1 --port=3306 --user=root --database=musical --password=Lotus2ibm < C:\SampleData\sql\ddlScript.sql
+mysql --host=127.0.0.1 --port=3306 --user=mysql --password=Swam2@mysql < /opt/Download/database.sql
 
 
 create table employee(
@@ -100,4 +100,7 @@ CREATE TABLE PAYTM_TX(
 
 create the /etc/systemd/system/mysqld.service.d directory if it does not exist
 in that directory create mysql.service
+
+
+ssh -vvv -fN root@192.168.122.97 -L 3306:192.168.122.97:3306 -i '/root/.ssh/id_rsa'
 
