@@ -1,0 +1,94 @@
+sudo yum install –y patch gcc kernel-headers kernel-devel make perl wget
+sudo reboot
+sudo wget http://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo -P /etc/yum.repos.d
+sudo yum install VirtualBox-6.0
+sudo systemctl status vboxdrv
+wget http://download.virtualbox.org/virtualbox/6.0.4/Oracle_VM_VirtualBox_Extension_Pack-6.0.4.vbox-extpack
+sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.0.4.vbox-extpack
+VirtualBox
+
+--db19c.rsp.version_rac---
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+oracle.install.option=INSTALL_DB_SWONLY
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/ora01/app/oraInventory
+ORACLE_HOME=/ora01/app/oracle/product/19/DB
+ORACLE_BASE=/ora01/app/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oper
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+oracle.install.db.rootconfig.executeRootScript=false
+oracle.install.db.CLUSTER_NODES=rac01,rac02
+---db19c.rsp.version_stand_alone------------
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+oracle.install.option=INSTALL_DB_SWONLY
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/ora01/app/oraInventory
+ORACLE_HOME=/ora01/app/oracle/product/19/DB
+ORACLE_BASE=/ora01/app/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oper
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+oracle.install.db.rootconfig.executeRootScript=true
+oracle.install.db.rootconfig.configMethod=ROOT
+-----grid19c.rsp.version_rac-----------------
+oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v19.0.0
+INVENTORY_LOCATION=/ora01/app/oraInventory
+oracle.install.option=CRS_CONFIG
+ORACLE_BASE=/ora01/app/oracle
+oracle.install.asm.OSDBA=asmdba
+oracle.install.asm.OSOPER=asmoper
+oracle.install.asm.OSASM=asmadmin
+oracle.install.crs.config.scanType=LOCAL_SCAN
+oracle.install.crs.config.gpnp.scanName=alpha-scan
+oracle.install.crs.config.gpnp.scanPort=1521
+oracle.install.crs.config.ClusterConfiguration=STANDALONE
+oracle.install.crs.config.configureAsExtendedCluster=false
+oracle.install.crs.config.clusterName=alpha
+oracle.install.crs.config.gpnp.configureGNS=false
+oracle.install.crs.config.autoConfigureClusterNodeVIP=false
+oracle.install.crs.config.clusterNodes=rac01:rac01-vip,rac02:rac02-vip
+oracle.install.crs.config.networkInterfaceList=bond0:192.168.56.0:1,enp0s8:192.168.57.0:2,enp0s10:192.168.58.0:2,enp0s16:192.168.56.59.0:4
+oracle.install.crs.configureGIMR=true
+oracle.install.asm.configureGIMRDataDG=true
+oracle.install.crs.config.useIPMI=false
+oracle.install.asm.SYSASMPassword=Manager19#
+oracle.install.asm.diskGroup.name=OCR_VOTING
+oracle.install.asm.diskGroup.redundancy=NORMAL
+oracle.install.asm.diskGroup.AUSize=4
+oracle.install.asm.diskGroup.disks=/dev/asm1,/dev/asm2,/dev/asm3
+oracle.install.asm.diskGroup.diskDiscoveryString=/dev/asm*
+oracle.install.asm.monitorPassword=Manager19#
+oracle.install.asm.gimrDG.name=MGMTDB
+oracle.install.asm.gimrDG.redundancy=NORMAL
+oracle.install.asm.gimrDG.AUSize=4
+oracle.install.asm.gimrDG.disks=/dev/asm4,/dev/asm5,/dev/asm6
+oracle.install.asm.configureAFD=false
+oracle.install.crs.configureRHPS=false
+oracle.install.crs.rootconfig.executeRootScript=false
+------------limits.conf.version_rac--------------------
+# Add this lines in /etc/security/limits.conf
+@oinstall soft nproc 16384
+@oinstall hard nproc 16384
+@oinstall soft nofile 1024
+@oinstall hard nofile 65536
+@oinstall soft stack 10240
+@oinstall hard stack 32768
+oracle soft memlock 134217728
+oracle hard memlock 134217728
+---------------------limits.conf.version_stand_alone----------------
+oracle soft nproc 16384
+oracle hard nproc 16384
+oracle soft nofile 1024
+oracle hard nofile 65536
+oracle soft stack 10240
+oracle hard stack 32768
+
