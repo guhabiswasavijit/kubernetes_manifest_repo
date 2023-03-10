@@ -1,0 +1,18 @@
+<dataConfig>
+	<dataSource driver="com.mysql.cj.jdbc.Driver" url="jdbc:mysql:User=wp_user;Password=Swam2@mysql;Database=wordpress;Server=127.0.0.1;Port=3306;">
+	</dataSource> 
+	<document> 
+		<entity name="Hotels" 
+			query="select Name,Amenities,Stars,City,Country,lastModified from wp_hotels"
+			deltaQuery="SELECT Id FROM wp_hotels  where lastModified  > '${dataimporter.last_index_time}'"
+			deltaImportQuery="select Id,Name,Amenities,Stars,City,Country,lastModified from wp_hotels  where Id=${dataimporter.delta.Id}">
+			<field column="Id" name="Id" ></field>
+			<field column="Name" name="Name" ></field>
+			<field column="Amenities" name="Amenities" ></field>
+			<field column="Stars" name="Stars" ></field>
+			<field column="City" name="City" ></field>
+			<field column="Country" name="Country" ></field>
+			<field column="lastModified" name="LastModifiedDate" ></field>   
+		</entity>
+	</document>
+</dataConfig>

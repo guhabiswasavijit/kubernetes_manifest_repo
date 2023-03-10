@@ -12,3 +12,72 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
+curl --user solr:SolrRocks -X DELETE http://localhost:8983/api/cluster/configs/HotelConfigSet?omitHeader=true
+curl --user solr:SolrRocks http://localhost:8983/admin/cores?action=CREATE&name=hotel_core&instanceDir=/opt/solr/data/hotels-dazzles&configSet=HotelConfigSet
+
+
+curl --user solr:SolrRocks -v -X POST -H 'Content-type: application/json' -d '{"create":[{"name": "hotel_core","instanceDir": "/opt/solr/data/hotels-dazzles","configSet": "HotelConfigSet"}]}' http://localhost:8983/api/cores
+
+
+
+
+
+
+
+
+
+curl --user solr:SolrRocks -X POST --header "Content-Type:application/octet-stream" --data-binary @myconfigset.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=HotelConfigSet"
+http://localhost:8983/solr/admin/configs?action=LIST&omitHeader=true
+
+zkcli.sh -zkhost localhost:2181 -cmd put /security.json '{
+"authentication":{
+   "blockUnknown": true,
+   "class":"solr.BasicAuthPlugin",
+   "credentials":{"solr":"IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c="}
+},
+"authorization":{
+   "class":"solr.RuleBasedAuthorizationPlugin",
+   "permissions":[{"name":"security-edit",
+      "role":"admin"}],
+   "user-role":{"solr":"admin"}
+}}'
+
+SOLR_JAAS_FILE=/opt/solr/server/etc/jaas-client.conf
+SOLR_HOST=`hostname -f`
+ZK_HOST=127.0.0.1:2181
+KERBEROS_REALM="EXAMPLE.COM"
+SOLR_KEYTAB=/etc/keytabs/solr/solr.keytab
+SOLR_KERB_PRINCIPAL=HTTP@${KERBEROS_REALM}
+SOLR_KERB_KEYTAB=/etc/keytabs/solr/HTTP.keytab
+SOLR_AUTHENTICATION_CLIENT_CONFIGURER="org.apache.solr.client.solrj.impl.Krb5HttpClientConfigurer"
+SOLR_AUTHENTICATION_OPTS=" -DauthenticationPlugin=org.apache.solr.security.KerberosPlugin
+ -Djava.security.auth.login.config=$SOLR_JAAS_FILE -Dsolr.kerberos.principal=${SOLR_KERB_PRINCIPAL}
+ -Dsolr.kerberos.keytab=${SOLR_KERB_KEYTAB} -Dsolr.kerberos.cookie.domain=${SOLR_HOST} -Dhost=${SOLR_HOST}
+ -Dsolr.kerberos.name.rules=DEFAULT"
+
+
+SOLR_AUTH_TYPE="basic"
+SOLR_AUTHENTICATION_OPTS="-Dbasicauth=solr:SolrRocks"
+
+curl --user solr:SolrRocks http://localhost:8983/solr/admin/authentication -H 'Content-type:application/json' -d '{"set-user": {"seven" : "Seven007" ,"teddy":"secret123"}}'
+
+--------SSL Setup  ---------------------
+------------- Solr Client ----------------
+keytool -genkeypair -alias solr-ssl -keyalg RSA -keysize 2048 -keypass secret -storepass secret -validity 9999 -keystore solr-ssl.keystore.jks -ext SAN=DNS:localhost,IP:127.0.0.1 -dname "CN=localhost, OU=Organizational Unit, O=Organization, L=Location, ST=State, C=Country"
+
+keytool -importkeystore -srckeystore solr-ssl.keystore.jks -destkeystore solr-ssl.keystore.p12 -srcstoretype jks -deststoretype pkcs12
+password-secret
+keytool -exportcert -keystore solr-ssl.keystore.p12 -alias solr-ssl -file solr-ssl.pem
+openssl x509 -in solr-ssl.pem -text
+openssl genrsa -out solr-ssl-ca.key 2048
+openssl req -x509 -new -nodes -key solr-ssl-ca.key -sha256 -days 1024 -out solr-ssl.pem
+openssl pkcs12 -export -name server-cert -in solr-ssl.pem -inkey solr-ssl-ca.key -out solr-ssl-keystore.p12
+-------------------------------------------------------
+
+------------- Zookeeper Server ----------------------
+keytool -genkeypair -alias zookeeper-ssl -keyalg RSA -keysize 2048 -keypass secret -storepass secret -validity 9999 -keystore zookeeper-ssl.keystore.jks -ext SAN=DNS:localhost,IP:127.0.0.1 -dname "CN=localhost, OU=Organizational Unit, O=Organization, L=Location, ST=State, C=Country"
+
+keytool -importkeystore -srckeystore zookeeper-ssl.keystore.jks -destkeystore zookeeper-ssl.keystore.p12 -srcstoretype jks -deststoretype pkcs12
+password-secret
+
+keytool -import -alias solr-cert -file /etc/solr/ssl/solr-ssl.pem -keystore zookeeper-ssl.truststore.p12

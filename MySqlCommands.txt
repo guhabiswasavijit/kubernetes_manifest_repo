@@ -104,3 +104,6 @@ in that directory create mysql.service
 
 ssh -vvv -fN root@192.168.122.97 -L 3306:192.168.122.97:3306 -i '/root/.ssh/id_rsa'
 
+CREATE USER wp_user@'%' IDENTIFIED BY 'Swam2@mysql';
+GRANT ALL PRIVILEGES ON *.* TO 'wp_user'@'%';
+flush privileges;

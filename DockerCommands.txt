@@ -101,7 +101,7 @@ docker run --rm -d --name kube-tomcat-master --net apache-net  -p 8081:8080 ^
 
 export CATALINA_OPTS=" ${CATALINA_OPTS} -Dnode.name=kube-tomcat-master"
 export CATALINA_OPTS=" ${CATALINA_OPTS} -Dnode.name=kube-tomcat-standby"
-
+docker build -f Dockerfile -t avijit1979/hadoop_3.3.1 .
 
 docker build -f Dockerfile-tomcat -t tomcat:9.0-custom .
 docker tag elasticsearch:8.1.9-custom avijit1979/elasticsearch:8.1.9-custom
