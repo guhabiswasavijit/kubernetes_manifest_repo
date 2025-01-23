@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-proxy
+spec:
+  containers:
+  - name: kube-proxy
+    image: rancher/kube-proxy:v1.18.8
